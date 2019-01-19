@@ -10,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -47,7 +48,7 @@ public class Player {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    private List<Score> playerScores;
+    private List<Score> playerScores = new ArrayList<>();
 
 
 }
