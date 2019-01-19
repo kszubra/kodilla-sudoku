@@ -27,7 +27,7 @@ public class Player {
     private int userID;
 
     @NotNull
-    @Column(name="USERNAME")
+    @Column(name="USERNAME", unique = true)
     private String username;
 
     @NotNull

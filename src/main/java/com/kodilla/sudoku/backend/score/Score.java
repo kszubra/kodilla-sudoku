@@ -25,6 +25,7 @@ public class Score {
     private int scoreId;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name="PLAYER_ID")
     private Player player;
 
