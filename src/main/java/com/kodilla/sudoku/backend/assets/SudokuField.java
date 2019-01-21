@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.kodilla.sudoku.backend.assets.Block.*;
 
@@ -71,7 +72,7 @@ public class SudokuField {
 
     public void setValue(int value) throws ValueNotAvailableException {
         if(possibleValues.contains(value)) {
-            Logger.getInstance().log("Setting SudokuField(" + this.coordinates.toString() + ") value for: " + value);
+            Logger.getInstance().log("Setting SudokuField(" + this.coordinates.toString() + " Block: " + block + ") value for: " + value);
             this.value = value;
         } else {
             throw new ValueNotAvailableException("Exception: " + value + " is not available for the field " + coordinates.toString());
@@ -81,7 +82,7 @@ public class SudokuField {
     public void removeFromPossibleValues(Integer valueToRemove) {
         possibleValues.remove(new Integer(valueToRemove));
         Logger.getInstance().log("Removing " + valueToRemove + " from possible values in row " + coordinates.getRow() +
-                " and column " + coordinates.getColumn() + " in block " + block);
+                " and column " + coordinates.getColumn() + " in block " + block + ". Remaining possible values are: " + possibleValues);
     }
 
     public int getRow() {
@@ -92,8 +93,47 @@ public class SudokuField {
         return coordinates.getColumn();
     }
 
+    public boolean valueIsEmpty() {
+        return value == EMPTY;
+    }
+
+    public void addToPossibleValues(Integer valueToAdd) {
+        if(!possibleValues.contains(valueToAdd)) {
+
+            possibleValues.add(valueToAdd);
+            Logger.getInstance().log("Adding " + valueToAdd + " to possible values in row " + coordinates.getRow() +
+                    " and column " + coordinates.getColumn() + " in block " + block + ". Remaining possible values are now: " + possibleValues);
+        } else {
+            Logger.getInstance().log("Value " + valueToAdd + " was not added to the list of possible values for the field " + coordinates + " because it already exists there");
+        }
+    }
+
+    public Integer resetField() {
+        if(!valueIsEmpty()) {
+            Integer valueToErease = new Integer(value);
+            addToPossibleValues(valueToErease);
+            value = EMPTY;
+            return valueToErease;
+        } else return null;
+    }
+
     @Override
     public String toString() {
-        return "B" + block + " R" + coordinates.getRow() + " C" + coordinates.getRow() + " V" + value;
+        //return "B" + block + " R" + coordinates.getRow() + " C" + coordinates.getRow() + " V" + value;
+        return String.valueOf(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SudokuField that = (SudokuField) o;
+        return value == that.value &&
+                Objects.equals(coordinates, that.coordinates);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(coordinates, value);
     }
 }

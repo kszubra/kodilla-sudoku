@@ -3,15 +3,12 @@ package com.kodilla.sudoku;
 import com.kodilla.sudoku.backend.assets.*;
 import com.kodilla.sudoku.backend.exceptions.TooManyItemsException;
 import com.kodilla.sudoku.backend.exceptions.ValueNotAvailableException;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.List;
 
 public class AssetsTestSuite {
-    private static SudokuBoard testBoard = new SudokuBoard();
+    private SudokuBoard testBoard;
     private static int testNumber = 0;
 
     @Before
@@ -29,6 +26,7 @@ public class AssetsTestSuite {
     @Test
     public void testFieldsNumberInMap() {
         System.out.println("number of fields in map");
+        testBoard = new SudokuBoard();
 
         //when
         int realFieldsNumber = testBoard.getFieldsNumber();
@@ -43,6 +41,7 @@ public class AssetsTestSuite {
         System.out.println("number of rows");
 
         //given
+        testBoard = new SudokuBoard();
         List<SudokuRow> testRows = testBoard.getBoardRows();
 
         //when
@@ -58,6 +57,7 @@ public class AssetsTestSuite {
         System.out.println("number of columns");
 
         //given
+        testBoard = new SudokuBoard();
         List<SudokuColumn> testColumns = testBoard.getBoardColumns();
 
         //when
@@ -71,6 +71,7 @@ public class AssetsTestSuite {
     @Test
     public void testAccidentalAddingTooManyItems() {
         System.out.println("trying to add 10th field to the row");
+        testBoard = new SudokuBoard();
 
         try {
             testBoard.getBoardRows().get(3).addField(new SudokuField(2,3));
@@ -82,6 +83,7 @@ public class AssetsTestSuite {
     @Test
     public void testDisplayingBoard() {
         System.out.println("displaying board");
+        testBoard = new SudokuBoard();
 
         testBoard.displayBoard();
     }
@@ -91,6 +93,7 @@ public class AssetsTestSuite {
         System.out.println("comparing coordinates");
 
         //given
+        testBoard = new SudokuBoard();
         BoardCoordinates coordinateOne = new BoardCoordinates(2,4);
         BoardCoordinates coordinateTwo = new BoardCoordinates(2, 4);
 
@@ -107,6 +110,7 @@ public class AssetsTestSuite {
         System.out.println("getting a field from the board");
 
         //Given
+        testBoard = new SudokuBoard();
         SudokuField testField = testBoard.getSudokuField(2,2);
 
         //then
@@ -118,6 +122,7 @@ public class AssetsTestSuite {
         System.out.println("setting field value");
 
         //Given
+        testBoard = new SudokuBoard();
         testBoard.setFieldValue(2, 5, 6);
 
         //then
@@ -129,6 +134,7 @@ public class AssetsTestSuite {
         System.out.println("whether references refer to same object");
 
         //given
+        testBoard = new SudokuBoard();
         testBoard.setFieldValue(5,3, 7);
 
         //when
@@ -144,6 +150,7 @@ public class AssetsTestSuite {
         System.out.println("whether references refer to same object");
 
         //given
+        testBoard = new SudokuBoard();
         try{
             testBoard.getBoardColumns().get(4).getFieldsInColumn().get(2).setValue(9);
         } catch (ValueNotAvailableException e) {
@@ -163,6 +170,7 @@ public class AssetsTestSuite {
         System.out.println("possibility to add same value in one row and column");
 
         //given
+        testBoard = new SudokuBoard();
         int value = 5;
         int row = 2;
         int column = 3;
@@ -179,6 +187,58 @@ public class AssetsTestSuite {
 
         Assert.assertNotEquals(testBoard.getSudokuField(row, column).getValue(), testBoard.getSudokuField(row, column+2).getValue());
         Assert.assertNotEquals(testBoard.getSudokuField(row, column).getValue(), testBoard.getSudokuField(row+2, column).getValue());
+    }
+
+    @Test
+    public void testCheckingBoardsEquality() {
+        System.out.println("whether two boards are equal");
+
+        //given
+        SudokuBoard testBoardOne = new SudokuBoard();
+        SudokuBoard testBoardTwo = new SudokuBoard();
+
+        //when
+        testBoardOne.setFieldValue(2,3,4);
+        testBoardTwo.setFieldValue(2,3,4);
+
+        //then
+        Assert.assertTrue(testBoardOne.equals(testBoardTwo));
+    }
+
+    @Test
+    public void testEreasingValue() {
+        System.out.println("ereasing given field");
+
+        //given
+        testBoard = new SudokuBoard();
+        SudokuBoard boardBeforeChanges = new SudokuBoard();
+
+        testBoard.setFieldValue(3,5, 8);
+        testBoard.setFieldValue(6, 7, 3);
+
+        //when
+        testBoard.ereaseFieldValue(3,5);
+        testBoard.ereaseFieldValue(6,7);
+
+        //then
+        Assert.assertTrue(testBoard.equals(boardBeforeChanges));
+    }
+
+
+    @Test
+    public void testAutoSolving() {
+        System.out.println("auto solving");
+        testBoard = new SudokuBoard();
+
+        //when
+        try {
+            testBoard.autoSolve();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        //then
+        testBoard.displayBoard();
     }
 
 }

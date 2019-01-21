@@ -5,10 +5,7 @@ import com.kodilla.sudoku.backend.exceptions.ValueNotAvailableException;
 import com.kodilla.sudoku.backend.logger.Logger;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public class SudokuBoard {
@@ -18,6 +15,7 @@ public class SudokuBoard {
     private static final int ROWS_NUMBER = 9;
     private static final int COLUMNS_NUMBER = 9;
 
+    private final Random randomGenerator = new Random();
 
     private Map<BoardCoordinates, SudokuField> fields;
     private List<SudokuBlock> boardBlocks;
@@ -76,6 +74,38 @@ public class SudokuBoard {
         return fields.get(new BoardCoordinates(row, column)).getValue();
     }
 
+    public void autoSolve() {
+        for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
+            if(entry.getValue().valueIsEmpty()) {
+
+                int row = entry.getValue().getRow();
+                int column = entry.getValue().getColumn();
+
+                int amountOfAvaiableValues = entry.getValue().getPossibleValues().size();
+                System.out.println("Amount of possible values at field " +"R"+row + " C"+column + " = " + amountOfAvaiableValues);
+                int indexOfRandomAvaiableValue = randomGenerator.nextInt(amountOfAvaiableValues);
+                int randomAvaiableValue = entry.getValue().getPossibleValues().get(indexOfRandomAvaiableValue);
+
+                setFieldValue(row, column, randomAvaiableValue);
+            }
+        }
+    }
+
+    public void ereaseFieldValue(int row, int column) {
+
+        BoardCoordinates cellCoordinates = new BoardCoordinates(row, column);
+        Block fieldBlock =  fields.get(cellCoordinates).getBlock();
+        int value = fields.get(cellCoordinates).resetField();
+
+        for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
+            if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlock().equals(fieldBlock)) {
+                entry.getValue().addToPossibleValues(value);
+            }
+        }
+
+
+    }
+
     public void setFieldValue(int row, int column, int value) {
         try {
             BoardCoordinates cellCoordinates = new BoardCoordinates(row, column);
@@ -94,5 +124,28 @@ public class SudokuBoard {
         }
     }
 
+    public boolean isComplete() {
+        boolean boardIsCompleted = true;
 
+        for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
+            if(entry.getValue().valueIsEmpty()) {
+                boardIsCompleted = false;
+            }
+        }
+
+        return boardIsCompleted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SudokuBoard that = (SudokuBoard) o;
+        return Objects.equals(fields, that.fields);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fields);
+    }
 }
