@@ -78,10 +78,12 @@ public class SudokuBoard {
 
     public void setFieldValue(int row, int column, int value) {
         try {
-            fields.get(new BoardCoordinates(row, column)).setValue(value);
+            BoardCoordinates cellCoordinates = new BoardCoordinates(row, column);
+            fields.get(cellCoordinates).setValue(value);
+            Block fieldBlock =  fields.get(cellCoordinates).getBlock();
 
             for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
-                if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row) {
+                if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlock().equals(fieldBlock)) {
                     entry.getValue().removeFromPossibleValues(value);
                 }
             }

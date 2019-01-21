@@ -179,7 +179,6 @@ public class AssetsTestSuite {
 
         Assert.assertNotEquals(testBoard.getSudokuField(row, column).getValue(), testBoard.getSudokuField(row, column+2).getValue());
         Assert.assertNotEquals(testBoard.getSudokuField(row, column).getValue(), testBoard.getSudokuField(row+2, column).getValue());
-
-
     }
+
 }

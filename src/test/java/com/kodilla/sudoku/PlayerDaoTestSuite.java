@@ -53,5 +53,8 @@ public class PlayerDaoTestSuite {
         //then
         Assert.assertTrue(loadedPlayer.getUsername().equals("testName"));
 
+        //cleanup
+        playerDao.delete(testPlayer);
+
     }
 }
