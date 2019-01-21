@@ -224,18 +224,31 @@ public class AssetsTestSuite {
         Assert.assertTrue(testBoard.equals(boardBeforeChanges));
     }
 
+    @Test
+    public void testEreasingAllFields() {
+        System.out.println("ereasing all fields of the board");
 
+        //given
+        testBoard = new SudokuBoard();
+        SudokuBoard boardBeforeChanges = new SudokuBoard();
+
+        testBoard.setFieldValue(3,5, 8);
+        testBoard.setFieldValue(6, 7, 3);
+
+        //when
+        testBoard.ereaseAllFields();
+
+        //then
+        Assert.assertTrue(testBoard.equals(boardBeforeChanges));
+
+    }
+
+    @Ignore
     @Test
     public void testAutoSolving() {
         System.out.println("auto solving");
         testBoard = new SudokuBoard();
 
-        //when
-        try {
-            testBoard.autoSolve();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
 
         //then
         testBoard.displayBoard();

@@ -136,6 +136,12 @@ public class SudokuBoard {
         return boardIsCompleted;
     }
 
+    public void ereaseAllFields() {
+        for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
+            entry.getValue().resetField();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
