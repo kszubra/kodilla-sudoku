@@ -32,7 +32,9 @@ public class SudokuBoard {
         for(int number = 0; number < ROWS_NUMBER; number++) {
             boardRows.add(new SudokuRow(number));
             boardColumns.add(new SudokuColumn(number));
+            boardBlocks.add(new SudokuBlock(number));
         }
+
 
         for(int row = 0; row < ROWS_NUMBER; row++) {
 
@@ -46,6 +48,7 @@ public class SudokuBoard {
                 try {
                     boardRows.get(row).addField(sudokuField);
                     boardColumns.get(column).addField(sudokuField);
+                    boardBlocks.get(sudokuField.getBlockNumber()).addFieldToBlock(sudokuField);
                 } catch (TooManyItemsException e) {
                     System.out.println(e.getMessage());
                 }
@@ -94,11 +97,11 @@ public class SudokuBoard {
     public void ereaseFieldValue(int row, int column) {
 
         BoardCoordinates cellCoordinates = new BoardCoordinates(row, column);
-        Block fieldBlock =  fields.get(cellCoordinates).getBlock();
+        int fieldBlock =  fields.get(cellCoordinates).getBlockNumber();
         int value = fields.get(cellCoordinates).resetField();
 
         for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
-            if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlock().equals(fieldBlock)) {
+            if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlockNumber() == fieldBlock) {
                 entry.getValue().addToPossibleValues(value);
             }
         }
@@ -110,10 +113,10 @@ public class SudokuBoard {
         try {
             BoardCoordinates cellCoordinates = new BoardCoordinates(row, column);
             fields.get(cellCoordinates).setValue(value);
-            Block fieldBlock =  fields.get(cellCoordinates).getBlock();
+            int fieldBlock =  fields.get(cellCoordinates).getBlockNumber();
 
             for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
-                if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlock().equals(fieldBlock)) {
+                if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlockNumber() == fieldBlock) {
                     entry.getValue().removeFromPossibleValues(value);
                 }
             }

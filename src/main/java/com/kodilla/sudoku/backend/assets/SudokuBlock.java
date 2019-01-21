@@ -1,7 +1,6 @@
 package com.kodilla.sudoku.backend.assets;
 
 import com.kodilla.sudoku.backend.exceptions.TooManyItemsException;
-import com.kodilla.sudoku.backend.logger.Logger;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -11,13 +10,11 @@ import java.util.List;
 public class SudokuBlock {
 
     private static final int MAX_FIELDS = 9;
-    private final BoardCoordinates coordinates;
+    private final int blockNumber;
     private List<SudokuField> fieldsInBlock;
 
-    public SudokuBlock(int coordinateRow, int coordinateColumn) {
-        Logger.getInstance().log("Creating SudokuBlock at X: " + coordinateRow +
-                                                                " Y: " + coordinateColumn);
-        this.coordinates = new BoardCoordinates(coordinateRow, coordinateColumn);
+    public SudokuBlock(int number) {
+        this.blockNumber = number;
         this.fieldsInBlock = new ArrayList<>();
     }
 

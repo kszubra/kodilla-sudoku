@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.kodilla.sudoku.backend.assets.Block.*;
-
 @Getter
 public class SudokuField {
     public static final int EMPTY = -1;
@@ -17,7 +15,7 @@ public class SudokuField {
     private final BoardCoordinates coordinates;
     private int value;
     private List<Integer> possibleValues = new ArrayList<>();
-    private Block block;
+    private int blockNumber;
 
     public SudokuField(int coordinateRow, int coordinateColumn) {
         this.coordinates = new BoardCoordinates(coordinateRow, coordinateColumn);
@@ -27,7 +25,7 @@ public class SudokuField {
         }
 
         assignToBlock();
-        Logger.getInstance().log("Creating new SudokuField at Row: " + coordinateRow + " Column: " + coordinateColumn + " in block: " + block);
+        Logger.getInstance().log("Creating new SudokuField at Row: " + coordinateRow + " Column: " + coordinateColumn + " in block: " + blockNumber);
     }
 
     private void assignToBlock() {
@@ -35,33 +33,33 @@ public class SudokuField {
         int column = coordinates.getColumn();
 
         if( (row > -1 && row < 3) && (column > -1 && column <3) ) {
-            this.block = ONE;
+            this.blockNumber = 0;
         }
         if( (row > -1 && row < 3) && (column > 2 && column <6) ) {
-            this.block = TWO;
+            this.blockNumber = 1;
         }
         if( (row > -1 && row < 3) && (column > 5 && column <9) ) {
-            this.block = THREE;
+            this.blockNumber = 2;
         }
 
         if( (row > 2 && row < 6) && (column > -1 && column <3) ) {
-            this.block = FOUR;
+            this.blockNumber = 3;
         }
         if( (row > 2 && row < 6) && (column > 2 && column <6) ) {
-            this.block = FIVE;
+            this.blockNumber = 4;
         }
         if( (row > 2 && row < 6) && (column > 5 && column <9) ) {
-            this.block = SIX;
+            this.blockNumber = 5;
         }
 
         if( (row > 5 && row < 9) && (column > -1 && column <3) ) {
-            this.block = SEVEN;
+            this.blockNumber = 6;
         }
         if( (row > 5 && row < 9) && (column > 2 && column <6) ) {
-            this.block = EIGHT;
+            this.blockNumber = 7;
         }
         if( (row > 5 && row < 9) && (column > 5 && column <9) ) {
-            this.block = NINE;
+            this.blockNumber = 8;
         }
     }
 
@@ -72,7 +70,7 @@ public class SudokuField {
 
     public void setValue(int value) throws ValueNotAvailableException {
         if(possibleValues.contains(value)) {
-            Logger.getInstance().log("Setting SudokuField(" + this.coordinates.toString() + " Block: " + block + ") value for: " + value);
+            Logger.getInstance().log("Setting SudokuField(" + this.coordinates.toString() + " Block: " + blockNumber + ") value for: " + value);
             this.value = value;
         } else {
             throw new ValueNotAvailableException("Exception: " + value + " is not available for the field " + coordinates.toString());
@@ -82,7 +80,7 @@ public class SudokuField {
     public void removeFromPossibleValues(Integer valueToRemove) {
         possibleValues.remove(new Integer(valueToRemove));
         Logger.getInstance().log("Removing " + valueToRemove + " from possible values in row " + coordinates.getRow() +
-                " and column " + coordinates.getColumn() + " in block " + block + ". Remaining possible values are: " + possibleValues);
+                " and column " + coordinates.getColumn() + " in block " +blockNumber + ". Remaining possible values are: " + possibleValues);
     }
 
     public int getRow() {
@@ -102,7 +100,7 @@ public class SudokuField {
 
             possibleValues.add(valueToAdd);
             Logger.getInstance().log("Adding " + valueToAdd + " to possible values in row " + coordinates.getRow() +
-                    " and column " + coordinates.getColumn() + " in block " + block + ". Remaining possible values are now: " + possibleValues);
+                    " and column " + coordinates.getColumn() + " in block " + blockNumber + ". Remaining possible values are now: " + possibleValues);
         } else {
             Logger.getInstance().log("Value " + valueToAdd + " was not added to the list of possible values for the field " + coordinates + " because it already exists there");
         }
