@@ -243,12 +243,31 @@ public class AssetsTestSuite {
 
     }
 
-    @Ignore
+    @Test
+    public void testProperFieldsInBlocks() {
+        System.out.println("whether fields are assigned to proper blocks");
+
+        //given
+        testBoard = new SudokuBoard();
+
+        //then
+        for(int number = 0; number<9; number++){
+            for(SudokuField field : testBoard.getBoardBlocks().get(number).getFieldsInBlock()) {
+                Assert.assertTrue(field.getBlockNumber() == number);
+            }
+        }
+    }
+
     @Test
     public void testAutoSolving() {
         System.out.println("auto solving");
         testBoard = new SudokuBoard();
 
+        try{
+            testBoard.autoSolve();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         //then
         testBoard.displayBoard();
