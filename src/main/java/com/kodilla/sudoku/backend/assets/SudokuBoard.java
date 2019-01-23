@@ -1,5 +1,6 @@
 package com.kodilla.sudoku.backend.assets;
 
+import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import com.kodilla.sudoku.backend.exceptions.TooManyItemsException;
 import com.kodilla.sudoku.backend.exceptions.ValueNotAvailableException;
 import com.kodilla.sudoku.backend.logger.Logger;
@@ -77,22 +78,47 @@ public class SudokuBoard {
         return fields.get(new BoardCoordinates(row, column)).getValue();
     }
 
-    public void autoSolve() {
-        for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
-            if(entry.getValue().valueIsEmpty()) {
+    public void preFill(DifficultyLevel difficultyLevel) {
 
-                int row = entry.getValue().getRow();
-                int column = entry.getValue().getColumn();
+        int numberOfFieldsToPreFill;
 
-                int amountOfAvaiableValues = entry.getValue().getPossibleValues().size();
-                System.out.println("Amount of possible values at field " +"R"+row + " C"+column + " = " + amountOfAvaiableValues);
-                int indexOfRandomAvaiableValue = randomGenerator.nextInt(amountOfAvaiableValues);
-                int randomAvaiableValue = entry.getValue().getPossibleValues().get(indexOfRandomAvaiableValue);
-
-                setFieldValue(row, column, randomAvaiableValue);
-            }
+        switch(difficultyLevel){
+            case EASY:
+                numberOfFieldsToPreFill = 50;
+                break;
+            case MEDIUM:
+                numberOfFieldsToPreFill = 30;
+                break;
+            case HARD:
+                numberOfFieldsToPreFill = 15;
+                break;
+            default:
+                numberOfFieldsToPreFill = 30;
+                break;
         }
+
+        Set<BoardCoordinates> randomCoordinatesToFill = new HashSet<>();
+
+        while(randomCoordinatesToFill.size() < numberOfFieldsToPreFill) {
+            int randomRow = randomGenerator.nextInt(9);
+            int randomColumn = randomGenerator.nextInt(9);
+            randomCoordinatesToFill.add(new BoardCoordinates(randomRow, randomColumn));
+        }
+
+        for(BoardCoordinates coordinates : randomCoordinatesToFill) {
+            setRandomValue(coordinates);
+        }
+
     }
+
+    private void setRandomValue(BoardCoordinates coordinates) {
+        int amountOfAvaiableValues = fields.get(coordinates).getPossibleValues().size();
+        int indexOfRandomAvaiableValue = randomGenerator.nextInt(amountOfAvaiableValues);
+        int randomAvaiableValue = fields.get(coordinates).getPossibleValues().get(indexOfRandomAvaiableValue);
+
+        setFieldValue(coordinates.getRow(), coordinates.getColumn(), randomAvaiableValue);
+    }
+
 
     public void ereaseFieldValue(int row, int column) {
 

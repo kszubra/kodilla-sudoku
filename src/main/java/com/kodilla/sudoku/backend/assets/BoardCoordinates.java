@@ -10,6 +10,11 @@ public class BoardCoordinates {
     private int row;
     private int column;
 
+    public BoardCoordinates(BoardCoordinates coordinates) {
+        this.row = coordinates.getRow();
+        this.column = coordinates.getColumn();
+    }
+
     @Override
     public String toString() {
         return "(Row: " + row +

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Getter
 public class SudokuField {
-    public static final int EMPTY = -1;
+    public static final int EMPTY = 0;
 
     private final BoardCoordinates coordinates;
     private int value;

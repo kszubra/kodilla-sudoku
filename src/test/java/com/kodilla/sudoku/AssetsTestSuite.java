@@ -1,6 +1,7 @@
 package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.assets.*;
+import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import com.kodilla.sudoku.backend.exceptions.TooManyItemsException;
 import com.kodilla.sudoku.backend.exceptions.ValueNotAvailableException;
 import org.junit.*;
@@ -259,18 +260,19 @@ public class AssetsTestSuite {
     }
 
     @Test
-    public void testAutoSolving() {
-        System.out.println("auto solving");
+    public void testFillingWithRandomValue() {
+        System.out.println("filling given coordinates with random available value");
+
+        //given
         testBoard = new SudokuBoard();
 
-        try{
-            testBoard.autoSolve();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        //when
+        testBoard.preFill(DifficultyLevel.MEDIUM);
 
         //then
         testBoard.displayBoard();
     }
+
+
 
 }
