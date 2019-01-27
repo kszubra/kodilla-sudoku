@@ -16,4 +16,11 @@ public class Game {
     private SudokuBoard gameBoard;
     private Player gamePlayer;
     private Score gameScore;
+
+    public Game(Player gamePlayer) {
+        this.gamePlayer = gamePlayer;
+        this.gameBoard = new SudokuBoard();
+        this.gameScore = new Score();
+        this.gameScore.setPlayer(gamePlayer);
+    }
 }

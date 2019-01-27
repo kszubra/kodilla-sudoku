@@ -11,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,6 +31,7 @@ public class SudokuApplication extends Application {
     BorderPane windowMainGridPane = new BorderPane();
     GridPane boardFieldsPane = new GridPane();
 
+
     private void initializeUiBoard() {
 
         for(int row = 0; row<BOARD_LINE_SIZE; row++) {
@@ -39,6 +39,8 @@ public class SudokuApplication extends Application {
                 generateInputGameField(new BoardCoordinates(row, column));
             }
         }
+
+        boardFieldsPane.setAlignment(Pos.CENTER);
 
     }
 
@@ -48,10 +50,10 @@ public class SudokuApplication extends Application {
         boardFieldsPane.add(inputField, fieldCoordinates.getRow(), fieldCoordinates.getColumn());
         inputField.setPromptText("0");
         inputField.setAlignment(Pos.CENTER);
+        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d");
+
 
         inputField.setOnKeyReleased(e->handleFieldInput(e));
-
-
     }
 
     /**
@@ -60,6 +62,8 @@ public class SudokuApplication extends Application {
 
     private void handleFieldInput(KeyEvent event){
         TextField eventObject = (TextField) event.getSource();
+        int fieldRow = GridPane.getRowIndex(eventObject);
+        int fieldColumn = GridPane.getColumnIndex(eventObject);
 
         String inputValue = eventObject.getText();
         System.out.println(inputValue);
@@ -67,6 +71,10 @@ public class SudokuApplication extends Application {
             MessageBox.displayMessage("Wrong value", "Input value should be a single number (1-9)");
             eventObject.setText("0");
             throw new WrongInputException("Input value should be a single number (1-9)");
+        } else if (currentGame.getGameBoard().setFieldValue(fieldRow, fieldColumn, Integer.parseInt(inputValue))) {
+
+        } else {
+            MessageBox.displayMessage("Value not available", "This value is not available in this field");
         }
 
     }
@@ -91,8 +99,9 @@ public class SudokuApplication extends Application {
 
         initializeUiBoard();
         windowMainGridPane.setCenter(boardFieldsPane);
+        windowMainGridPane.setStyle("-fx-background-color: #0b0d0f");
 
-        Scene scene = new Scene(windowMainGridPane, 300, 300, Color.BLACK);
+        Scene scene = new Scene(windowMainGridPane, 300, 300);
 
         window.setTitle("Sudoku 0.0.1");
         window.setResizable(true);

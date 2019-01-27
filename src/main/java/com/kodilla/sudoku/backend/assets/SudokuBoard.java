@@ -58,6 +58,24 @@ public class SudokuBoard {
             }
         }
 
+        setStartingEmptyBoard();
+
+    }
+
+    private void setStartingEmptyBoard() {
+        int[][] board = {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
+
+        setStartingBoard(board);
     }
 
 
@@ -164,7 +182,7 @@ public class SudokuBoard {
 
     }
 
-    public void setFieldValue(int row, int column, int value) {
+    public boolean setFieldValue(int row, int column, int value) {
         try {
             BoardCoordinates cellCoordinates = new BoardCoordinates(row, column);
             fields.get(cellCoordinates).setValue(value);
@@ -176,9 +194,12 @@ public class SudokuBoard {
                 }
             }
 
+            return true;
+
         } catch (ValueNotAvailableException e) {
             Logger.getInstance().log(e.getMessage());
             System.out.println(e.getMessage());
+            return false;
         }
     }
 
