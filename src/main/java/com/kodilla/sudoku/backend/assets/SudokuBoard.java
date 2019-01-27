@@ -11,8 +11,8 @@ import java.util.*;
 @Getter
 public class SudokuBoard {
 
-    private static final int FIELDS_NUMBER = 81;
-    private static final int BLOCKS_NUMBER = 9;
+    private static final int BOARD_SIZE = 81;
+    private static final int BLOCK_SIZE = 9;
     private static final int ROWS_NUMBER = 9;
     private static final int COLUMNS_NUMBER = 9;
 
@@ -22,6 +22,8 @@ public class SudokuBoard {
     private List<SudokuBlock> boardBlocks;
     private List<SudokuRow> boardRows;
     private List<SudokuColumn> boardColumns;
+
+    private int[][] startingBoard = new int[9][9];
 
 
     public SudokuBoard() {
@@ -35,7 +37,6 @@ public class SudokuBoard {
             boardColumns.add(new SudokuColumn(number));
             boardBlocks.add(new SudokuBlock(number));
         }
-
 
         for(int row = 0; row < ROWS_NUMBER; row++) {
 
@@ -57,6 +58,28 @@ public class SudokuBoard {
             }
         }
 
+    }
+
+
+    public void setStartingBoard(int[][] initializeMatrix) {
+        startingBoard = initializeMatrix;
+        setBoardFromMatrix(initializeMatrix);
+
+    }
+
+    public void setBoardFromMatrix(int[][] matrix) {
+        for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
+            int row = entry.getKey().getRow();
+            int column = entry.getKey().getColumn();
+            int valueToSet = matrix[row][column];
+
+            setFieldValue(row, column, valueToSet);
+        }
+
+    }
+
+    public int[][] getBoardToSolve() {
+        return startingBoard;
     }
 
     public int getFieldsNumber() {
@@ -90,7 +113,7 @@ public class SudokuBoard {
                 numberOfFieldsToPreFill = 30;
                 break;
             case HARD:
-                numberOfFieldsToPreFill = 15;
+                numberOfFieldsToPreFill = 10;
                 break;
             default:
                 numberOfFieldsToPreFill = 30;
@@ -107,6 +130,12 @@ public class SudokuBoard {
 
         for(BoardCoordinates coordinates : randomCoordinatesToFill) {
             setRandomValue(coordinates);
+        }
+
+        for(int row =0; row<ROWS_NUMBER; row++) {
+            for(int column = 0; column<COLUMNS_NUMBER; column++) {
+                startingBoard[row][column] = fields.get(new BoardCoordinates(row, column)).getValue();
+            }
         }
 
     }
