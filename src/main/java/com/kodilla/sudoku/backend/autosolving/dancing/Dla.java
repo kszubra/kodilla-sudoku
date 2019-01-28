@@ -1,7 +1,5 @@
 package com.kodilla.sudoku.backend.autosolving.dancing;
 
-import com.kodilla.sudoku.backend.autosolving.AutoSolver;
-
 import java.util.Arrays;
 
 public class Dla  {
@@ -14,15 +12,15 @@ public class Dla  {
     private static final int COVER_START_INDEX = 1;
 
     private static int[][] board = {
-            {0, 0, 0, 8, 6, 0, 0, 0, 0},
-            {0, 0, 0, 9, 0, 0, 0, 7, 0},
-            {0, 9, 0, 7, 0, 0, 0, 0, 0},
-            {0, 6, 0, 4, 0, 0, 0, 0, 8},
-            {1, 8, 2, 0, 5, 0, 3, 4, 0},
-            {0, 0, 0, 0, 0, 1, 0, 9, 5},
-            {0, 0, 1, 0, 8, 4, 0, 0, 0},
-            {0, 0, 0, 2, 0, 0, 7, 8, 4},
-            {0, 0, 0, 3, 7, 5, 9, 0, 6}
+            {8, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 3, 6, 0, 0, 0, 0, 0},
+            {0, 7, 0, 0, 9, 0, 2, 0, 0},
+            {0, 5, 0, 0, 0, 7, 0, 0, 0},
+            {0, 0, 0, 0, 4, 5, 7, 0, 0},
+            {0, 0, 0, 1, 0, 0, 0, 3, 0},
+            {0, 0, 1, 0, 0, 0, 0, 6, 8},
+            {0, 0, 8, 5, 0, 0, 0, 1, 0},
+            {0, 9, 0, 0, 0, 0, 4, 0, 0}
     };
 
     public static void main(String[] args) {

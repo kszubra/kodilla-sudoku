@@ -50,37 +50,86 @@ public class SudokuApplication extends Application {
         boardFieldsPane.add(inputField, fieldCoordinates.getRow(), fieldCoordinates.getColumn());
         inputField.setPromptText("0");
         inputField.setAlignment(Pos.CENTER);
-        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d");
-
+        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-width: 1px; -fx-border-color: #efc35d; -fx-border-style: dotted");
 
         inputField.setOnKeyReleased(e->handleFieldInput(e));
     }
 
-    /**
-     * Validates input. If it's proper, adds to the field and backend board
-     */
-
-    private void handleFieldInput(KeyEvent event){
+    private void handleFieldInput(KeyEvent event) {
         TextField eventObject = (TextField) event.getSource();
         int fieldRow = GridPane.getRowIndex(eventObject);
         int fieldColumn = GridPane.getColumnIndex(eventObject);
 
         String inputValue = eventObject.getText();
         System.out.println(inputValue);
+
+        /**
+         * Check if value has proper format, if not - set it to 0 in UI
+         */
         if(! validateFieldInputFormat(inputValue) ) {
             MessageBox.displayMessage("Wrong value", "Input value should be a single number (1-9)");
             eventObject.setText("0");
-            throw new WrongInputException("Input value should be a single number (1-9)");
-        } else if (currentGame.getGameBoard().setFieldValue(fieldRow, fieldColumn, Integer.parseInt(inputValue))) {
+            currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
 
-        } else {
+            throw new WrongInputException("Input value should be a single number (1-9)");
+
+        }
+
+        /**
+         * if input is 0 or null - reset field in the board
+         */
+
+        else if( inputValue.isEmpty() | inputValue.equals("0") ) {
+            eventObject.setText("0");
+            currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
+
+        }
+
+        /**
+         * if value is proper and not 0 - try to putting it on the game board
+         */
+
+        else if (currentGame.getGameBoard().setFieldValue(fieldRow, fieldColumn, Integer.parseInt(inputValue))) {
+
+        }
+
+        /**
+         * if value is not available for the field, display 0 on UI
+         */
+
+        else {
+            eventObject.setText("0");
             MessageBox.displayMessage("Value not available", "This value is not available in this field");
+        }
+
+        if(isGameComplete()) {
+            MessageBox.displayMessage("Congratulations!", "Congratulations, you completed the puzzle");
+            handleEndGame();
         }
 
     }
 
+    private void handleEndGame() {
+        // TODO: handle setting score, saving it ect. etc.
+    }
+
+    private boolean isGameComplete() {
+
+        if(currentGame.getGameBoard().isComplete()) {
+            currentGame.setComplete(true);
+            return true;
+        } else {
+            currentGame.setComplete(false);
+            return false;
+        }
+    }
 
     private boolean validateFieldInputFormat(String input) {
+
+        if(input.isEmpty()) {
+            return true;
+        }
+
         char firstCharacter = input.charAt(0);
 
         if( !Character.isDigit(firstCharacter) ) {
@@ -92,14 +141,12 @@ public class SudokuApplication extends Application {
         }
     }
 
-
-
     @Override
-    public void start(Stage window) throws Exception {
+    public void start(Stage window) {
 
         initializeUiBoard();
         windowMainGridPane.setCenter(boardFieldsPane);
-        windowMainGridPane.setStyle("-fx-background-color: #0b0d0f");
+        windowMainGridPane.setStyle("-fx-background-color: #121221");
 
         Scene scene = new Scene(windowMainGridPane, 300, 300);
 
@@ -107,8 +154,6 @@ public class SudokuApplication extends Application {
         window.setResizable(true);
         window.setScene(scene);
         window.show();
-
-
     }
 
     public static void main(String[] args) {

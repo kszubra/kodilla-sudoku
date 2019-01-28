@@ -188,9 +188,14 @@ public class SudokuBoard {
             fields.get(cellCoordinates).setValue(value);
             int fieldBlock =  fields.get(cellCoordinates).getBlockNumber();
 
-            for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
-                if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlockNumber() == fieldBlock) {
-                    entry.getValue().removeFromPossibleValues(value);
+            /**
+             * 0 doesn't follow the rules and is not mentioned in available list so don't try to remove it
+             */
+            if (value != 0) {
+                for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
+                    if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlockNumber() == fieldBlock) {
+                        entry.getValue().removeFromPossibleValues(value);
+                    }
                 }
             }
 

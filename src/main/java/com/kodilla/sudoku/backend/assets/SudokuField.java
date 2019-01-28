@@ -65,11 +65,20 @@ public class SudokuField {
 
     /**
      * DO NOT USE METHOD BELOW ON ITS OWN - ALWAYS THROUTH GAME BOARD. BOARD REMOVES SET VALUE FROM OTHER FIELDS.
-     * USING THIS METHOD ALONE WOULDN'T SECURE IT.
+     * USING THIS METHOD ALONE WOULDN'T SECURE IT!!!!!!!
      * */
 
     public void setValue(int value) throws ValueNotAvailableException {
-        if(possibleValues.contains(value)) {
+
+        /**
+         * 0 can happen many times, rules don't apply here so just assign it
+         */
+
+        if(value == 0) {
+            this.value = 0;
+        }
+
+        else if(value != 0 && possibleValues.contains(value)) {
             Logger.getInstance().log("Setting SudokuField(" + this.coordinates.toString() + " Block: " + blockNumber + ") value for: " + value);
             this.value = value;
         } else {
