@@ -2,15 +2,11 @@ package com.kodilla.sudoku.backend.assets;
 
 import com.kodilla.sudoku.backend.player.Player;
 import com.kodilla.sudoku.backend.score.Score;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Game {
 
     private SudokuBoard gameBoard;
@@ -19,6 +15,13 @@ public class Game {
 
     public Game(Player gamePlayer) {
         this.gamePlayer = gamePlayer;
+        this.gameBoard = new SudokuBoard();
+        this.gameScore = new Score();
+        this.gameScore.setPlayer(gamePlayer);
+    }
+
+    public Game() {
+        this.gamePlayer = new Player();
         this.gameBoard = new SudokuBoard();
         this.gameScore = new Score();
         this.gameScore.setPlayer(gamePlayer);
