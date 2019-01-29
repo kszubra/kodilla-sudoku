@@ -4,15 +4,12 @@ import com.kodilla.sudoku.backend.assets.SudokuBoard;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.exceptions.UnableToSolveException;
 
-import java.util.stream.IntStream;
-
 public class BSolver implements AutoSolver {
-    private static final int BOARD_SIZE = 9;
-    private static final int BLOCK_SIZE = 3;
-
+    private static final int BLOCK_SIZE = 9;
+    private static final int BLOCK_ROW_NUMBER = 3;
+    private static final int ROWS_NUMBER = 9;
+    private static final int COLUMNS_NUMBER = 9;
     private static final int EMPTY = 0;
-    private static final int MIN_VALUE = 1;
-    private static final int MAX_VALUE = 9;
 
     private static int[][] board;
 
@@ -23,14 +20,13 @@ public class BSolver implements AutoSolver {
         } else {
             throw new UnableToSolveException("Unable to solve this puzzle");
         }
-;
     }
 
     private boolean solve(int[][] board) {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int column = 0; column < BOARD_SIZE; column++) {
+        for (int row = 0; row < ROWS_NUMBER; row++) {
+            for (int column = 0; column < COLUMNS_NUMBER; column++) {
                 if (board[row][column] == EMPTY) {
-                    for (int i = MIN_VALUE; i <= MAX_VALUE; i++) {
+                    for (int i = 1; i < 10; i++) {
                         board[row][column] = i;
                         if (isAvailable(board, row, column) && solve(board)) {
                             return true;
@@ -45,18 +41,18 @@ public class BSolver implements AutoSolver {
     }
 
     private boolean isAvailable(int[][] board, int row, int column) {
-        return availableInRow(board, row) &&
-                availableInColumn(board, column) &&
-                availableInBlock(board, row, column);
+        return isAvailableInRow(board, row) &&
+                isAvailableInColumn(board, column) &&
+                isAvailableInBlock(board, row, column);
     }
 
-    private boolean availableInBlock(int[][] board, int row, int column) {
-        boolean[] constraint = new boolean[BOARD_SIZE];
-        int subsectionRowStart = (row / BLOCK_SIZE) * BLOCK_SIZE;
-        int subsectionRowEnd = subsectionRowStart + BLOCK_SIZE;
+    private boolean isAvailableInBlock(int[][] board, int row, int column) {
+        boolean[] constraint = new boolean[BLOCK_SIZE];
+        int subsectionRowStart = (row / BLOCK_ROW_NUMBER) * BLOCK_ROW_NUMBER;
+        int subsectionRowEnd = subsectionRowStart + BLOCK_ROW_NUMBER;
 
-        int subsectionColumnStart = (column / BLOCK_SIZE) * BLOCK_SIZE;
-        int subsectionColumnEnd = subsectionColumnStart + BLOCK_SIZE;
+        int subsectionColumnStart = (column / BLOCK_ROW_NUMBER) * BLOCK_ROW_NUMBER;
+        int subsectionColumnEnd = subsectionColumnStart + BLOCK_ROW_NUMBER;
 
         for (int r = subsectionRowStart; r < subsectionRowEnd; r++) {
             for (int c = subsectionColumnStart; c < subsectionColumnEnd; c++) {
@@ -66,16 +62,26 @@ public class BSolver implements AutoSolver {
         return true;
     }
 
-    private boolean availableInColumn(int[][] board, int column) {
-        boolean[] constraint = new boolean[BOARD_SIZE];
-        return IntStream.range(0, BOARD_SIZE)
-                .allMatch(row -> checkConstraint(board, row, constraint, column));
+    private boolean isAvailableInColumn(int[][] board, int column) {
+        boolean[] constraint = new boolean[COLUMNS_NUMBER];
+
+        for(int i=0; i<COLUMNS_NUMBER; i++) {
+            if( !checkConstraint(board, i, constraint, column) ){
+                return false;
+            }
+        }
+        return true;
     }
 
-    private boolean availableInRow(int[][] board, int row) {
-        boolean[] constraint = new boolean[BOARD_SIZE];
-        return IntStream.range(0, BOARD_SIZE)
-                .allMatch(column -> checkConstraint(board, row, constraint, column));
+    private boolean isAvailableInRow(int[][] board, int row) {
+        boolean[] constraint = new boolean[ROWS_NUMBER];
+
+        for(int i=0; i<ROWS_NUMBER; i++) {
+            if ( !checkConstraint(board, row, constraint, i) ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean checkConstraint(int[][] board, int row, boolean[] constraint, int column) {

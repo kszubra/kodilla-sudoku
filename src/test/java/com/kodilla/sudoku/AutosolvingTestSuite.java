@@ -68,6 +68,6 @@ public class AutosolvingTestSuite {
 
             //then
             Assert.assertTrue(testBoard.isComplete());
-
     }
+
 }

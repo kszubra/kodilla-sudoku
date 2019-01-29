@@ -2,6 +2,7 @@ package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.assets.BoardCoordinates;
 import com.kodilla.sudoku.backend.assets.Game;
+import com.kodilla.sudoku.backend.assets.SudokuBoard;
 import com.kodilla.sudoku.backend.exceptions.WrongInputException;
 import com.kodilla.sudoku.frontend.popups.MessageBox;
 import javafx.application.Application;
@@ -14,7 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +41,7 @@ public class SudokuApplication extends Application {
         }
 
         boardFieldsPane.setAlignment(Pos.CENTER);
+        boardValuesToUi();
 
     }
 
@@ -50,7 +51,7 @@ public class SudokuApplication extends Application {
         boardFieldsPane.add(inputField, fieldCoordinates.getRow(), fieldCoordinates.getColumn());
         inputField.setPromptText("0");
         inputField.setAlignment(Pos.CENTER);
-        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-width: 1px; -fx-border-color: #efc35d; -fx-border-style: dashed");
+        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-width: 1px; -fx-border-color: #efc35d;");
 
         inputField.setOnKeyReleased(e->handleFieldInput(e));
     }
@@ -64,47 +65,53 @@ public class SudokuApplication extends Application {
         System.out.println(inputValue);
 
         /**
-         * Check if value has proper format, if not - set it to 0 in UI
-         */
-        if(! validateFieldInputFormat(inputValue) ) {
-            MessageBox.displayMessage("Wrong value", "Input value should be a single number (1-9)");
-            eventObject.setText("0");
-            currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
-
-            throw new WrongInputException("Input value should be a single number (1-9)");
-
-        }
-
-        /**
-         * if input is 0 or null - reset field in the board
+         * Allow actions only on editable fields
          */
 
-        else if( inputValue.isEmpty() | inputValue.equals("0") ) {
-            eventObject.setText("0");
-            currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
+        if( eventObject.isEditable() ) {
+            /**
+             * Check if value has proper format, if not - set it to 0 in UI
+             */
+            if(! validateFieldInputFormat(inputValue) ) {
+                MessageBox.displayMessage("Wrong value", "Input value should be a single number (1-9)");
+                eventObject.setText("0");
+                currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
 
-        }
+                throw new WrongInputException("Input value should be a single number (1-9)");
 
-        /**
-         * if value is proper and not 0 - try to putting it on the game board
-         */
+            }
 
-        else if (currentGame.getGameBoard().setFieldValue(fieldRow, fieldColumn, Integer.parseInt(inputValue))) {
+            /**
+             * if input is 0 or null - reset field in the board
+             */
 
-        }
+            else if( inputValue.isEmpty() | inputValue.equals("0") ) {
+                eventObject.setText("0");
+                currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
 
-        /**
-         * if value is not available for the field, display 0 on UI
-         */
+            }
 
-        else {
-            eventObject.setText("0");
-            MessageBox.displayMessage("Value not available", "This value is not available in this field");
-        }
+            /**
+             * if value is proper and not 0 - try to putting it on the game board
+             */
 
-        if(isGameComplete()) {
-            MessageBox.displayMessage("Congratulations!", "Congratulations, you completed the puzzle");
-            handleEndGame();
+            else if (currentGame.getGameBoard().setFieldValue(fieldRow, fieldColumn, Integer.parseInt(inputValue))) {
+
+            }
+
+            /**
+             * if value is not available for the field, display 0 on UI
+             */
+
+            else {
+                eventObject.setText("0");
+                MessageBox.displayMessage("Value not available", "This value is not available in this field");
+            }
+
+            if(isGameComplete()) {
+                MessageBox.displayMessage("Congratulations!", "Congratulations, you completed the puzzle");
+                handleEndGame();
+            }
         }
 
     }
@@ -141,6 +148,24 @@ public class SudokuApplication extends Application {
         }
     }
 
+    private void boardValuesToUi() {
+        SudokuBoard sourceBoard = currentGame.getGameBoard();
+
+        for(Map.Entry<BoardCoordinates, TextField> entry : userInterfaceFieldsMap.entrySet()) {
+            int row = entry.getKey().getRow();
+            int column = entry.getKey().getColumn();
+            int value = sourceBoard.getSudokuFieldValue(row, column);
+
+            System.out.println("Placing value: " + value + " in row: " + row + " column: " + column + " from source board into UI");
+
+            entry.getValue().setText(String.valueOf(value));
+            if(value !=0) {
+                entry.getValue().setEditable(false);
+            }
+        }
+
+    }
+
     @Override
     public void start(Stage window) {
 
@@ -150,7 +175,7 @@ public class SudokuApplication extends Application {
 
         Scene scene = new Scene(windowMainGridPane, 300, 300);
 
-        window.setTitle("Sudoku 0.0.1");
+        window.setTitle("Sudoku");
         window.setResizable(true);
         window.setScene(scene);
         window.show();
