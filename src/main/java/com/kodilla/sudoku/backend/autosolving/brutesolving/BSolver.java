@@ -1,4 +1,4 @@
-package com.kodilla.sudoku.backend.autosolving.backtracking;
+package com.kodilla.sudoku.backend.autosolving.brutesolving;
 
 import com.kodilla.sudoku.backend.assets.SudokuBoard;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
@@ -30,9 +30,9 @@ public class BSolver implements AutoSolver {
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int column = 0; column < BOARD_SIZE; column++) {
                 if (board[row][column] == EMPTY) {
-                    for (int k = MIN_VALUE; k <= MAX_VALUE; k++) {
-                        board[row][column] = k;
-                        if (isValid(board, row, column) && solve(board)) {
+                    for (int i = MIN_VALUE; i <= MAX_VALUE; i++) {
+                        board[row][column] = i;
+                        if (isAvailable(board, row, column) && solve(board)) {
                             return true;
                         }
                         board[row][column] = EMPTY;
@@ -44,13 +44,13 @@ public class BSolver implements AutoSolver {
         return true;
     }
 
-    private boolean isValid(int[][] board, int row, int column) {
-        return rowConstraint(board, row) &&
-                columnConstraint(board, column) &&
-                subsectionConstraint(board, row, column);
+    private boolean isAvailable(int[][] board, int row, int column) {
+        return availableInRow(board, row) &&
+                availableInColumn(board, column) &&
+                availableInBlock(board, row, column);
     }
 
-    private boolean subsectionConstraint(int[][] board, int row, int column) {
+    private boolean availableInBlock(int[][] board, int row, int column) {
         boolean[] constraint = new boolean[BOARD_SIZE];
         int subsectionRowStart = (row / BLOCK_SIZE) * BLOCK_SIZE;
         int subsectionRowEnd = subsectionRowStart + BLOCK_SIZE;
@@ -66,13 +66,13 @@ public class BSolver implements AutoSolver {
         return true;
     }
 
-    private boolean columnConstraint(int[][] board, int column) {
+    private boolean availableInColumn(int[][] board, int column) {
         boolean[] constraint = new boolean[BOARD_SIZE];
         return IntStream.range(0, BOARD_SIZE)
                 .allMatch(row -> checkConstraint(board, row, constraint, column));
     }
 
-    private boolean rowConstraint(int[][] board, int row) {
+    private boolean availableInRow(int[][] board, int row) {
         boolean[] constraint = new boolean[BOARD_SIZE];
         return IntStream.range(0, BOARD_SIZE)
                 .allMatch(column -> checkConstraint(board, row, constraint, column));

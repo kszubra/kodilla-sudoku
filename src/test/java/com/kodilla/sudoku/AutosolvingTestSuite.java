@@ -2,7 +2,7 @@ package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.assets.SudokuBoard;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
-import com.kodilla.sudoku.backend.autosolving.backtracking.BSolver;
+import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import org.junit.After;
 import org.junit.Assert;

@@ -50,7 +50,7 @@ public class SudokuApplication extends Application {
         boardFieldsPane.add(inputField, fieldCoordinates.getRow(), fieldCoordinates.getColumn());
         inputField.setPromptText("0");
         inputField.setAlignment(Pos.CENTER);
-        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-width: 1px; -fx-border-color: #efc35d; -fx-border-style: dotted");
+        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-width: 1px; -fx-border-color: #efc35d; -fx-border-style: dashed");
 
         inputField.setOnKeyReleased(e->handleFieldInput(e));
     }
