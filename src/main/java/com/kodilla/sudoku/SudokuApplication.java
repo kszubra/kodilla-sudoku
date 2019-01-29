@@ -50,7 +50,7 @@ public class SudokuApplication extends Application {
     private void generateInputGameField(BoardCoordinates fieldCoordinates) {
         TextField inputField = new TextField();
         userInterfaceFieldsMap.put(fieldCoordinates, inputField);
-        boardFieldsPane.add(inputField, fieldCoordinates.getRow(), fieldCoordinates.getColumn());
+        boardFieldsPane.add(inputField, fieldCoordinates.getColumn(), fieldCoordinates.getRow());
         inputField.setPromptText("0");
         inputField.setAlignment(Pos.CENTER);
         inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-width: 1px; -fx-border-color: #efc35d;");
@@ -189,8 +189,10 @@ public class SudokuApplication extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+
         SpringApplication.run(SudokuApplication.class, args);
+        launch(args);
+
     }
 
 }
