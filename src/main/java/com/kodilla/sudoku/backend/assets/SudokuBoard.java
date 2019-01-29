@@ -1,6 +1,7 @@
 package com.kodilla.sudoku.backend.assets;
 
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
+import com.kodilla.sudoku.backend.exceptions.NoValueToEreaseException;
 import com.kodilla.sudoku.backend.exceptions.TooManyItemsException;
 import com.kodilla.sudoku.backend.exceptions.ValueNotAvailableException;
 import com.kodilla.sudoku.backend.logger.Logger;
@@ -171,13 +172,18 @@ public class SudokuBoard {
 
         BoardCoordinates cellCoordinates = new BoardCoordinates(row, column);
         int fieldBlock =  fields.get(cellCoordinates).getBlockNumber();
-        int value = fields.get(cellCoordinates).resetField();
-
-        for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
-            if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlockNumber() == fieldBlock) {
-                entry.getValue().addToPossibleValues(value);
+        try {
+            int value = fields.get(cellCoordinates).resetField();
+            for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
+                if(entry.getValue().getColumn() == column || entry.getValue().getRow() == row || entry.getValue().getBlockNumber() == fieldBlock) {
+                    entry.getValue().addToPossibleValues(value);
+                }
             }
+        } catch (NoValueToEreaseException e) {
+            System.out.println(e.getMessage());
         }
+
+
 
 
     }
@@ -222,7 +228,11 @@ public class SudokuBoard {
 
     public void ereaseAllFields() {
         for(Map.Entry<BoardCoordinates, SudokuField> entry : fields.entrySet()) {
-            entry.getValue().resetField();
+            try {
+                entry.getValue().resetField();
+            } catch (NoValueToEreaseException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 

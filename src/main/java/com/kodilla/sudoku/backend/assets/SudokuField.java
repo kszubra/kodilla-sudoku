@@ -1,5 +1,6 @@
 package com.kodilla.sudoku.backend.assets;
 
+import com.kodilla.sudoku.backend.exceptions.NoValueToEreaseException;
 import com.kodilla.sudoku.backend.exceptions.ValueNotAvailableException;
 import com.kodilla.sudoku.backend.logger.Logger;
 import lombok.Getter;
@@ -115,13 +116,13 @@ public class SudokuField {
         }
     }
 
-    public Integer resetField() {
+    public Integer resetField() throws NoValueToEreaseException{
         if(!valueIsEmpty()) {
             Integer valueToErease = new Integer(value);
             addToPossibleValues(valueToErease);
             value = EMPTY;
             return valueToErease;
-        } else return null;
+        } else throw new NoValueToEreaseException("there's no value to remove");
     }
 
     @Override

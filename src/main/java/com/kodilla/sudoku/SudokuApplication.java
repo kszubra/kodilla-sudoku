@@ -16,8 +16,10 @@ import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 
 @SpringBootApplication
 public class SudokuApplication extends Application {
@@ -152,11 +154,14 @@ public class SudokuApplication extends Application {
 
     private void boardValuesToUi() {
         SudokuBoard sourceBoard = currentGame.getGameBoard();
+        int[][] array = sourceBoard.getStartingBoard();
+        Arrays.stream(array)
+                .forEach(e-> System.out.println(Arrays.toString(e)));
 
         for(Map.Entry<BoardCoordinates, TextField> entry : userInterfaceFieldsMap.entrySet()) {
             int row = entry.getKey().getRow();
             int column = entry.getKey().getColumn();
-            int value = sourceBoard.getSudokuFieldValue(row, column);
+            int value = array[row][column];
 
             System.out.println("Placing value: " + value + " in row: " + row + " column: " + column + " from source board into UI");
 
