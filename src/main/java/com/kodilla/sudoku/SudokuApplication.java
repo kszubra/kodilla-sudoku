@@ -58,17 +58,19 @@ public class SudokuApplication extends Application {
 
     private void handleFieldInput(KeyEvent event) {
         TextField eventObject = (TextField) event.getSource();
-        int fieldRow = GridPane.getRowIndex(eventObject);
-        int fieldColumn = GridPane.getColumnIndex(eventObject);
-
-        String inputValue = eventObject.getText();
-        System.out.println(inputValue);
 
         /**
          * Allow actions only on editable fields
          */
 
         if( eventObject.isEditable() ) {
+            int fieldRow = GridPane.getRowIndex(eventObject);
+            int fieldColumn = GridPane.getColumnIndex(eventObject);
+
+            String inputValue = eventObject.getText();
+            System.out.println(inputValue);
+
+
             /**
              * Check if value has proper format, if not - set it to 0 in UI
              */

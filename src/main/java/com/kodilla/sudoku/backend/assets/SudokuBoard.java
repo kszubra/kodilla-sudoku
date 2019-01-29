@@ -82,7 +82,6 @@ public class SudokuBoard {
     public void setStartingBoard(int[][] initializeMatrix) {
         startingBoard = initializeMatrix;
         setBoardFromMatrix(initializeMatrix);
-
     }
 
     public void setBoardFromMatrix(int[][] matrix) {
