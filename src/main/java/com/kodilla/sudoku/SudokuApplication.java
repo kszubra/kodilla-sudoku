@@ -8,11 +8,14 @@ import com.kodilla.sudoku.frontend.popups.MessageBox;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -30,8 +33,22 @@ public class SudokuApplication extends Application {
     private Map<BoardCoordinates, TextField> userInterfaceFieldsMap = new HashMap<>();
     private Game currentGame = new Game();
 
-    BorderPane windowMainGridPane = new BorderPane();
-    GridPane boardFieldsPane = new GridPane();
+    private BorderPane windowMainGridPane = new BorderPane();
+    private GridPane boardFieldsPane = new GridPane();
+
+    private Button changeUserButton, newBoardButton, exitButton;
+    private VBox rightPanel;
+
+
+    private void initializeRightPanel() {
+        changeUserButton = new Button("Switch user");
+        newBoardButton = new Button("Generate new board");
+        exitButton = new Button("Exit");
+        exitButton.setOnMouseClicked(e->System.exit(0));
+
+        rightPanel = new VBox(newBoardButton, changeUserButton, exitButton);
+        rightPanel.setAlignment(Pos.CENTER);
+    }
 
 
     private void initializeUiBoard() {
@@ -177,13 +194,16 @@ public class SudokuApplication extends Application {
     public void start(Stage window) {
 
         initializeUiBoard();
+        initializeRightPanel();
         windowMainGridPane.setCenter(boardFieldsPane);
+        windowMainGridPane.setRight(rightPanel);
         windowMainGridPane.setStyle("-fx-background-color: #121221");
 
         Scene scene = new Scene(windowMainGridPane, 300, 300);
 
         window.setTitle("Sudoku");
         window.setResizable(true);
+        window.initStyle(StageStyle.DECORATED);
         window.setScene(scene);
         window.show();
     }

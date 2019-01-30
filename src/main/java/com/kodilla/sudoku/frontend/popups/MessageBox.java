@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class MessageBox {
 
@@ -16,10 +17,12 @@ public class MessageBox {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL); //below windows can't be entered before dealing with this one
         window.setTitle(windowTitle);
-        window.setWidth(600);
+        window.initStyle(StageStyle.UNDECORATED);
+        window.setWidth(500);
 
         Label messageLabel = new Label();
         messageLabel.setText(message);
+        messageLabel.setStyle("-fx-color: #DCDCDC; -fx-border-color: #DCDCDC");
 
         Button closeButton = new Button();
         closeButton.setText("Ok");
@@ -29,6 +32,7 @@ public class MessageBox {
         windowLayout.setSpacing(10);
         windowLayout.setPadding(new Insets(5,5,5,5));
         windowLayout.setAlignment(Pos.CENTER);
+        windowLayout.setStyle("-fx-background-color: #663399");
 
         Scene scene = new Scene(windowLayout);
         window.setScene(scene);
