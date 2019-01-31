@@ -8,6 +8,7 @@ import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import com.kodilla.sudoku.backend.exceptions.WrongInputException;
 import com.kodilla.sudoku.frontend.popups.MessageBox;
+import com.kodilla.sudoku.frontend.popups.NewGameBox;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -31,7 +32,6 @@ import java.util.Map;
 public class SudokuApplication extends Application {
 
     private static final int BOARD_LINE_SIZE = 9;
-    private static final int BOARD_SIZE = 81;
 
     private Map<BoardCoordinates, TextField> userInterfaceFieldsMap = new HashMap<>();
     private Game currentGame = new Game();
@@ -239,6 +239,7 @@ public class SudokuApplication extends Application {
 
     @Override
     public void start(Stage window) {
+        NewGameBox.getUserPreference();
 
         initializeUiBoard();
         initializeRightPanel();
