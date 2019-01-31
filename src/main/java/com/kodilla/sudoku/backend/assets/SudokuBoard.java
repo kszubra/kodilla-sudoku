@@ -4,6 +4,7 @@ import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import com.kodilla.sudoku.backend.exceptions.NoValueToEreaseException;
 import com.kodilla.sudoku.backend.exceptions.TooManyItemsException;
 import com.kodilla.sudoku.backend.exceptions.ValueNotAvailableException;
+import com.kodilla.sudoku.backend.generator.BoardGenerator;
 import com.kodilla.sudoku.backend.logger.Logger;
 import lombok.Getter;
 
@@ -64,19 +65,9 @@ public class SudokuBoard {
     }
 
     private void setStartingExampleBoard() {
-        int[][] board = {
-                {8, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 3, 6, 0, 0, 0, 0, 0},
-                {0, 7, 0, 0, 9, 0, 2, 0, 0},
-                {0, 5, 0, 0, 0, 7, 0, 0, 0},
-                {0, 0, 0, 0, 4, 5, 7, 0, 0},
-                {0, 0, 0, 1, 0, 0, 0, 3, 0},
-                {0, 0, 1, 0, 0, 0, 0, 6, 8},
-                {0, 0, 8, 5, 0, 0, 0, 1, 0},
-                {0, 9, 0, 0, 0, 0, 4, 0, 0}
-        };
 
-        setStartingBoard(board);
+        preFill(DifficultyLevel.MEDIUM);
+
     }
 
 
@@ -95,10 +86,6 @@ public class SudokuBoard {
             }
         }
 
-    }
-
-    public int[][] getBoardToSolve() {
-        return startingBoard;
     }
 
     public int getFieldsNumber() {
@@ -122,51 +109,31 @@ public class SudokuBoard {
 
     public void preFill(DifficultyLevel difficultyLevel) {
 
+        BoardGenerator generator = new BoardGenerator();
+
         int numberOfFieldsToPreFill;
 
         switch(difficultyLevel){
             case EASY:
-                numberOfFieldsToPreFill = 50;
+                numberOfFieldsToPreFill = 30;
                 break;
             case MEDIUM:
-                numberOfFieldsToPreFill = 30;
+                numberOfFieldsToPreFill = 20;
                 break;
             case HARD:
                 numberOfFieldsToPreFill = 10;
                 break;
             default:
-                numberOfFieldsToPreFill = 30;
+                numberOfFieldsToPreFill = 20;
                 break;
         }
 
-        Set<BoardCoordinates> randomCoordinatesToFill = new HashSet<>();
+        startingBoard = generator.getSolvableBoard(BOARD_SIZE - numberOfFieldsToPreFill);
 
-        while(randomCoordinatesToFill.size() < numberOfFieldsToPreFill) {
-            int randomRow = randomGenerator.nextInt(9);
-            int randomColumn = randomGenerator.nextInt(9);
-            randomCoordinatesToFill.add(new BoardCoordinates(randomRow, randomColumn));
-        }
+        setBoardFromMatrix(startingBoard);
 
-        for(BoardCoordinates coordinates : randomCoordinatesToFill) {
-            setRandomValue(coordinates);
-        }
-
-        for(int row =0; row<ROWS_NUMBER; row++) {
-            for(int column = 0; column<COLUMNS_NUMBER; column++) {
-                startingBoard[row][column] = fields.get(new BoardCoordinates(row, column)).getValue();
-            }
-        }
 
     }
-
-    private void setRandomValue(BoardCoordinates coordinates) {
-        int amountOfAvaiableValues = fields.get(coordinates).getPossibleValues().size();
-        int indexOfRandomAvaiableValue = randomGenerator.nextInt(amountOfAvaiableValues);
-        int randomAvaiableValue = fields.get(coordinates).getPossibleValues().get(indexOfRandomAvaiableValue);
-
-        setFieldValue(coordinates.getRow(), coordinates.getColumn(), randomAvaiableValue);
-    }
-
 
     public void ereaseFieldValue(int row, int column) {
 
@@ -182,9 +149,6 @@ public class SudokuBoard {
         } catch (NoValueToEreaseException e) {
             System.out.println(e.getMessage());
         }
-
-
-
 
     }
 
