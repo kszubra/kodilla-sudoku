@@ -61,6 +61,7 @@ public class SudokuApplication extends Application {
 
         boardFieldsPane.setAlignment(Pos.CENTER);
         boardValuesToUi();
+        setFieldsBorders();
 
     }
 
@@ -70,9 +71,37 @@ public class SudokuApplication extends Application {
         boardFieldsPane.add(inputField, fieldCoordinates.getColumn(), fieldCoordinates.getRow());
         inputField.setPromptText("0");
         inputField.setAlignment(Pos.CENTER);
-        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-width: 1px; -fx-border-color: #efc35d;");
+        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-color: #29293d;");
 
         inputField.setOnKeyReleased(e->handleFieldInput(e));
+    }
+
+    private void setFieldsBorders() {
+        for(Map.Entry<BoardCoordinates, TextField> entry : userInterfaceFieldsMap.entrySet()) {
+
+            int row = entry.getKey().getRow();
+            int column = entry.getKey().getColumn();
+
+            if(column == 2 || column == 5) {
+                entry.getValue().setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d;  -fx-border-width: 1px; " +
+                        "-fx-border-color: #29293d #e5db9c #29293d #29293d ;");
+
+                if( (column == 2 && row == 2) || (column == 2 && row == 5) || (column == 5 && row == 5) || (column == 5 && row == 2) ) {
+                    entry.getValue().setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d;  -fx-border-width: 1px; " +
+                            "-fx-border-color: #29293d #e5db9c #e5db9c #29293d ;");
+                }
+            }
+
+            if( ( (row == 2) || (row == 5) )
+                    && !(row == 2 && column == 2)
+                    && !(row == 2 && column == 5)
+                    && !(row == 5 && column == 2)
+                    && !(row == 5 && column == 5) ) {
+
+                entry.getValue().setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d;  -fx-border-width: 1px; " +
+                        "-fx-border-color: #29293d #29293d #e5db9c #29293d ;");
+            }
+        }
     }
 
     private void handleFieldInput(KeyEvent event) {
@@ -203,6 +232,8 @@ public class SudokuApplication extends Application {
 
         window.setTitle("Sudoku");
         window.setResizable(true);
+        window.setHeight(400);
+        window.setWidth(450);
         window.initStyle(StageStyle.DECORATED);
         window.setScene(scene);
         window.show();
