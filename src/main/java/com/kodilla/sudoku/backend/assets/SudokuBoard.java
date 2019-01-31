@@ -59,15 +59,6 @@ public class SudokuBoard {
 
             }
         }
-
-        setStartingExampleBoard();
-
-    }
-
-    private void setStartingExampleBoard() {
-
-        preFill(DifficultyLevel.MEDIUM);
-
     }
 
 

@@ -17,6 +17,10 @@ public class NewGameBox {
 
     private static final int ONE = 1;
     private static InitialGameData initialGameData;
+    private static final String EXPLANATION = "Difficulty levels differs in number of pre-filled fields. \r\n" +
+                                                "EASY: 30 filled fields \r\n" +
+                                                "MEDIUM: 20 filled fields \r\n" +
+                                                "HARD: 10 filled fields";
 
     public static InitialGameData getUserPreference() {
 
@@ -45,6 +49,10 @@ public class NewGameBox {
         difficultyLevelChoiceBox.getItems().addAll(DifficultyLevel.EASY, DifficultyLevel.MEDIUM, DifficultyLevel.HARD);
         difficultyLevelChoiceBox.setValue(DifficultyLevel.MEDIUM);
 
+        Button helpButton = new Button();
+        helpButton.setText("HELP");
+        helpButton.setOnMouseClicked(e -> MessageBox.displayMessage("Explanation", EXPLANATION));
+
         Button confirmButton = new Button();
         confirmButton.setText("Confirm");
         confirmButton.setOnMouseClicked(e -> {
@@ -62,7 +70,7 @@ public class NewGameBox {
         });
 
         VBox windowLayout = new VBox(nameField, inputLogin, passwordField, inputPassword, difficultyLevelChoice,
-                difficultyLevelChoiceBox, confirmButton);
+                difficultyLevelChoiceBox, confirmButton, helpButton);
         windowLayout.setSpacing(10);
         windowLayout.setPadding(new Insets(5, 5, 5, 5));
         windowLayout.setAlignment(Pos.CENTER);

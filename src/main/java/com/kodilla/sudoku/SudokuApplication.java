@@ -2,11 +2,14 @@ package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.assets.BoardCoordinates;
 import com.kodilla.sudoku.backend.assets.Game;
+import com.kodilla.sudoku.backend.assets.InitialGameData;
 import com.kodilla.sudoku.backend.assets.SudokuBoard;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import com.kodilla.sudoku.backend.exceptions.WrongInputException;
+import com.kodilla.sudoku.frontend.popups.CreateUserBox;
+import com.kodilla.sudoku.frontend.popups.LoginOrRegisterBox;
 import com.kodilla.sudoku.frontend.popups.MessageBox;
 import com.kodilla.sudoku.frontend.popups.NewGameBox;
 import javafx.application.Application;
@@ -32,9 +35,10 @@ import java.util.Map;
 public class SudokuApplication extends Application {
 
     private static final int BOARD_LINE_SIZE = 9;
+    private final double BUTTON_WIDTH = 150;
 
     private Map<BoardCoordinates, TextField> userInterfaceFieldsMap = new HashMap<>();
-    private Game currentGame = new Game();
+    private Game currentGame;
     private AutoSolver solver = new BSolver();
 
     private BorderPane windowMainGridPane = new BorderPane();
@@ -47,12 +51,19 @@ public class SudokuApplication extends Application {
     private void initializeRightPanel() {
         solveButton = new Button("Solve");
         solveButton.setOnMouseClicked(e -> solveBoard());
+        solveButton.setPrefWidth(BUTTON_WIDTH);
 
         changeUserButton = new Button("Switch user");
+        changeUserButton.setOnMouseClicked(e -> startNewGame(NewGameBox.getUserPreference()));
+        changeUserButton.setPrefWidth(BUTTON_WIDTH);
+
         newBoardButton = new Button("Generate new board");
         newBoardButton.setOnMouseClicked(e -> setNewBoard());
+        newBoardButton.setPrefWidth(BUTTON_WIDTH);
+
         exitButton = new Button("Exit");
         exitButton.setOnMouseClicked(e->System.exit(0));
+        exitButton.setPrefWidth(BUTTON_WIDTH);
 
         rightPanel = new VBox(solveButton, newBoardButton, changeUserButton, exitButton);
         rightPanel.setAlignment(Pos.CENTER);
@@ -237,9 +248,22 @@ public class SudokuApplication extends Application {
 
     }
 
+    public void startNewGame(InitialGameData initalData) {
+        currentGame = new Game(initalData);
+        boardValuesToUi();
+    }
+
     @Override
     public void start(Stage window) {
-        NewGameBox.getUserPreference();
+        boolean login = LoginOrRegisterBox.getDecision();
+        if(login) {
+            startNewGame(NewGameBox.getUserPreference());
+        } else {
+            CreateUserBox.createUser();
+            startNewGame(NewGameBox.getUserPreference());
+        }
+
+
 
         initializeUiBoard();
         initializeRightPanel();
