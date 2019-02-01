@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
-public class CreateUserBox {
+public class ProfileGenerator {
     @Autowired
     PlayerDao playerDao;
     private final int ONE = 1;

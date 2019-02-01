@@ -8,7 +8,7 @@ import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import com.kodilla.sudoku.backend.exceptions.WrongInputException;
-import com.kodilla.sudoku.frontend.popups.CreateUserBox;
+import com.kodilla.sudoku.frontend.popups.ProfileGenerator;
 import com.kodilla.sudoku.frontend.popups.LoginOrRegisterBox;
 import com.kodilla.sudoku.frontend.popups.MessageBox;
 import com.kodilla.sudoku.frontend.popups.NewGameBox;
@@ -259,7 +259,7 @@ public class SudokuApplication extends Application {
         if(login) {
             startNewGame(NewGameBox.getUserPreference());
         } else {
-            CreateUserBox box = new CreateUserBox();
+            ProfileGenerator box = new ProfileGenerator();
             box.createUser();
             startNewGame(NewGameBox.getUserPreference());
         }
