@@ -16,10 +16,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+@Service
 public class CreateUserBox {
     @Autowired
     PlayerDao playerDao;
