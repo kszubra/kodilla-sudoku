@@ -39,7 +39,7 @@ public class CreateUserBox {
         TextField inputLogin = new TextField();
         inputLogin.textProperty().addListener((obs, oldText, newText) -> {
             boolean available = false;
-            //TODO: check if database if username is free
+            //TODO: check if newText is available in database
 
             if (available) {
                 inputLogin.setStyle("-fx-background-color: PaleGreen");
@@ -60,6 +60,15 @@ public class CreateUserBox {
         confirmPasswordField.setText("Confirm password:");
 
         PasswordField inputConfirmPassword = new PasswordField();
+        inputConfirmPassword.textProperty().addListener((obs, oldText, newText) -> {
+
+            if ( newText.equals(inputPassword.getText()) ) {
+                inputConfirmPassword.setStyle("-fx-background-color: PaleGreen");
+            } else {
+                inputConfirmPassword.setStyle("-fx-background-color: LightCoral");
+            }
+
+        });
         inputConfirmPassword.setMaxWidth(window.getWidth() * 0.5);
 
         Button confirmButton = new Button();
