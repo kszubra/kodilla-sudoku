@@ -89,11 +89,12 @@ public class CreateUserBox {
                 player.setRegistrationDate(LocalDate.now());
                 playerDao.save(player);
 
+                window.close();
+
             } else {
                 //TODO: things if passwords don't match etc
             }
 
-            window.close();
 
 
         });
