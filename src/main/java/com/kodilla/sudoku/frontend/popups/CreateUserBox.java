@@ -25,7 +25,7 @@ public class CreateUserBox {
     @Autowired
     PlayerDao playerDao;
     private final int ONE = 1;
-    private boolean availableLogin = false;
+    private boolean availableLogin = true;
 
     public void createUser() {
 
