@@ -25,6 +25,7 @@ public class CreateUserBox {
     @Autowired
     PlayerDao playerDao;
     private final int ONE = 1;
+    private boolean availableLogin = false;
 
     public void createUser() {
 
@@ -39,10 +40,10 @@ public class CreateUserBox {
 
         TextField inputLogin = new TextField();
         inputLogin.textProperty().addListener((obs, oldText, newText) -> {
-            boolean available = false;
+
             //TODO: check if newText is available in database
 
-            if (available) {
+            if (availableLogin) {
                 inputLogin.setStyle("-fx-background-color: PaleGreen");
             } else {
                 inputLogin.setStyle("-fx-background-color: LightCoral");
@@ -77,6 +78,7 @@ public class CreateUserBox {
         confirmButton.setOnMouseClicked(e -> {
 
             if (isNotBlank(inputLogin)
+                    && availableLogin
                     && isNotBlank(inputPassword)
                     && isNotBlank(inputConfirmPassword)
                     && inputPassword.getText().equals(inputConfirmPassword.getText()) ) {
