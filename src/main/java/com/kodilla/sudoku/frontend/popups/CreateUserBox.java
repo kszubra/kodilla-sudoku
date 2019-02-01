@@ -1,22 +1,31 @@
 package com.kodilla.sudoku.frontend.popups;
 
-import com.kodilla.sudoku.backend.assets.InitialGameData;
-import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
+import com.kodilla.sudoku.backend.password.hasher.Sha512Hasher;
+import com.kodilla.sudoku.backend.player.Player;
+
+import com.kodilla.sudoku.backend.player.PlayerDao;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
+import java.time.LocalDate;
 
 public class CreateUserBox {
-    private static final int ONE = 1;
+    @Autowired
+    PlayerDao playerDao;
+    private final int ONE = 1;
 
-    public static void createUser() {
+    public void createUser() {
 
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL); //below windows can't be entered before dealing with this one
@@ -28,18 +37,29 @@ public class CreateUserBox {
         loginField.setText("Login:");
 
         TextField inputLogin = new TextField();
+        inputLogin.textProperty().addListener((obs, oldText, newText) -> {
+            boolean available = false;
+            //TODO: check if database if username is free
+
+            if (available) {
+                inputLogin.setStyle("-fx-background-color: PaleGreen");
+            } else {
+                inputLogin.setStyle("-fx-background-color: LightCoral");
+            }
+
+        });
         inputLogin.setMaxWidth(window.getWidth() * 0.5);
 
         Label passwordField = new Label();
         passwordField.setText("Password:");
 
-        TextField inputPassword = new TextField();
+        PasswordField inputPassword = new PasswordField();
         inputPassword.setMaxWidth(window.getWidth() * 0.5);
 
         Label confirmPasswordField = new Label();
         confirmPasswordField.setText("Confirm password:");
 
-        TextField inputConfirmPassword = new TextField();
+        PasswordField inputConfirmPassword = new PasswordField();
         inputConfirmPassword.setMaxWidth(window.getWidth() * 0.5);
 
         Button confirmButton = new Button();
@@ -53,12 +73,18 @@ public class CreateUserBox {
 
 
                 //TODO: create user in database and close window
-
-                window.close();
+                System.out.println("Passwords match");
+                Player player = new Player();
+                player.setUsername(inputLogin.getText());
+                player.setHashedPassword( Sha512Hasher.getInstance().generateHashedPassword(inputPassword.getText())  );
+                player.setRegistrationDate(LocalDate.now());
+                playerDao.save(player);
 
             } else {
                 //TODO: things if passwords don't match etc
             }
+
+            window.close();
 
 
         });
@@ -75,7 +101,7 @@ public class CreateUserBox {
 
     }
 
-    private static boolean isNotBlank(TextField inputTextField) {
+    private boolean isNotBlank(TextField inputTextField) {
         return inputTextField.getText().length() >= ONE;
     }
 }

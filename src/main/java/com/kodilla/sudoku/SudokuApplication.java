@@ -259,7 +259,8 @@ public class SudokuApplication extends Application {
         if(login) {
             startNewGame(NewGameBox.getUserPreference());
         } else {
-            CreateUserBox.createUser();
+            CreateUserBox box = new CreateUserBox();
+            box.createUser();
             startNewGame(NewGameBox.getUserPreference());
         }
 

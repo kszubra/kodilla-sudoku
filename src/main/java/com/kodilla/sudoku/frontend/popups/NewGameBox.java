@@ -5,10 +5,7 @@ import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,7 +36,7 @@ public class NewGameBox {
         Label passwordField = new Label();
         passwordField.setText("Password:");
 
-        TextField inputPassword = new TextField();
+        PasswordField inputPassword = new PasswordField();
         inputPassword.setMaxWidth(window.getWidth() * 0.5);
 
         Label difficultyLevelChoice = new Label();

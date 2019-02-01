@@ -21,7 +21,6 @@ import java.time.LocalDate;
 public class PlayerDaoTestSuite {
     @Autowired
     PlayerDao playerDao;
-
     private static int testNumber;
 
 
@@ -41,17 +40,20 @@ public class PlayerDaoTestSuite {
     public void testAddingNewPlayer() {
         //given
         PasswordHasher hasher = Sha512Hasher.getInstance();
-        String username = "testName";
-        String securePassword = hasher.generateHashedPassword("Password123");
+        Player testPlayer = new Player();
+        String username = "TestPlayer";
+        String securePassword = hasher.generateHashedPassword("TestPassword");
         LocalDate registered = LocalDate.now();
-        Player testPlayer = new Player(1, username, securePassword, registered, null, null);
+        testPlayer.setUsername(username);
+        testPlayer.setHashedPassword(securePassword);
+        testPlayer.setRegistrationDate(registered);
 
         //when
         playerDao.save(testPlayer);
-        Player loadedPlayer = playerDao.findById(1).orElseThrow(()-> new PlayerNotFoundException("Given player was not found"));
+        Player loadedPlayer = playerDao.findById(2).orElseThrow(()-> new PlayerNotFoundException("Given player was not found"));
 
         //then
-        Assert.assertTrue(loadedPlayer.getUsername().equals("testName"));
+        Assert.assertTrue(loadedPlayer.getUsername().equals("TestPlayer"));
 
         //cleanup
         playerDao.delete(testPlayer);
