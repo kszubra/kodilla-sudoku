@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -33,6 +34,8 @@ import java.util.Map;
 
 @SpringBootApplication
 public class SudokuApplication extends Application {
+    @Autowired
+    ProfileGenerator profileGenerator;
 
     private static final int BOARD_LINE_SIZE = 9;
     private final double BUTTON_WIDTH = 150;
@@ -259,12 +262,9 @@ public class SudokuApplication extends Application {
         if(login) {
             startNewGame(NewGameBox.getUserPreference());
         } else {
-            ProfileGenerator box = new ProfileGenerator();
-            box.createUser();
+            profileGenerator.createUser();
             startNewGame(NewGameBox.getUserPreference());
         }
-
-
 
         initializeUiBoard();
         initializeRightPanel();

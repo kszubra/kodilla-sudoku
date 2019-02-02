@@ -24,8 +24,10 @@ import java.time.LocalDate;
 public class ProfileGenerator {
     @Autowired
     PlayerDao playerDao;
+
     private final int ONE = 1;
     private boolean availableLogin = true;
+
 
     public void createUser() {
 
@@ -83,7 +85,6 @@ public class ProfileGenerator {
                     && isNotBlank(inputConfirmPassword)
                     && inputPassword.getText().equals(inputConfirmPassword.getText()) ) {
 
-
                 //TODO: create user in database and close window
                 System.out.println("Passwords match");
                 Player player = new Player();
@@ -97,8 +98,6 @@ public class ProfileGenerator {
             } else {
                 //TODO: things if passwords don't match etc
             }
-
-
 
         });
 
