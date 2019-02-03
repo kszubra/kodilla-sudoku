@@ -1,5 +1,6 @@
 package com.kodilla.sudoku.frontend.popups;
 
+import com.kodilla.sudoku.backend.exceptions.PlayerNotFoundException;
 import com.kodilla.sudoku.backend.password.hasher.Sha512Hasher;
 import com.kodilla.sudoku.backend.player.Player;
 
@@ -26,7 +27,7 @@ public class ProfileGenerator {
     PlayerDao playerDao;
 
     private final int ONE = 1;
-    private boolean availableLogin = true;
+    private boolean availableLogin = false;
 
 
     public void createUser() {
@@ -43,7 +44,12 @@ public class ProfileGenerator {
         TextField inputLogin = new TextField();
         inputLogin.textProperty().addListener((obs, oldText, newText) -> {
 
-            //TODO: check if newText is available in database
+            try {
+                Player player = playerDao.getPlayerByUsername(newText).orElseThrow(() -> new PlayerNotFoundException("Given login does not exist"));
+                availableLogin=false;
+            } catch (PlayerNotFoundException e) {
+                availableLogin=true;
+            }
 
             if (availableLogin) {
                 inputLogin.setStyle("-fx-background-color: PaleGreen");

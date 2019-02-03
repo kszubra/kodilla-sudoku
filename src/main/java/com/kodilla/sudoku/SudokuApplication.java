@@ -11,7 +11,7 @@ import com.kodilla.sudoku.backend.exceptions.WrongInputException;
 import com.kodilla.sudoku.frontend.popups.ProfileGenerator;
 import com.kodilla.sudoku.frontend.popups.LoginOrRegisterBox;
 import com.kodilla.sudoku.frontend.popups.MessageBox;
-import com.kodilla.sudoku.frontend.popups.NewGameBox;
+import com.kodilla.sudoku.frontend.popups.NewGameGenerator;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -38,6 +38,8 @@ public class SudokuApplication extends Application {
     private static ConfigurableApplicationContext context;
     @Autowired
     ProfileGenerator profileGenerator;
+    @Autowired
+    NewGameGenerator newGameGenerator;
 
     private static final int BOARD_LINE_SIZE = 9;
     private final double BUTTON_WIDTH = 150;
@@ -54,12 +56,14 @@ public class SudokuApplication extends Application {
 
 
     private void initializeRightPanel() {
+        NewGameGenerator newGameGenerator = context.getBean(NewGameGenerator.class);
+
         solveButton = new Button("Solve");
         solveButton.setOnMouseClicked(e -> solveBoard());
         solveButton.setPrefWidth(BUTTON_WIDTH);
 
         changeUserButton = new Button("Switch user");
-        changeUserButton.setOnMouseClicked(e -> startNewGame(NewGameBox.getUserPreference()));
+        changeUserButton.setOnMouseClicked(e -> startNewGame(newGameGenerator.getUserPreference()));
         changeUserButton.setPrefWidth(BUTTON_WIDTH);
 
         newBoardButton = new Button("Generate new board");
@@ -261,13 +265,14 @@ public class SudokuApplication extends Application {
     @Override
     public void start(Stage window) {
         ProfileGenerator profileGenerator = context.getBean(ProfileGenerator.class);
+        NewGameGenerator newGameGenerator = context.getBean(NewGameGenerator.class);
 
         boolean login = LoginOrRegisterBox.getDecision();
         if(login) {
-            startNewGame(NewGameBox.getUserPreference());
+            startNewGame(newGameGenerator.getUserPreference());
         } else {
             profileGenerator.createUser();
-            startNewGame(NewGameBox.getUserPreference());
+            startNewGame(newGameGenerator.getUserPreference());
         }
 
         initializeUiBoard();

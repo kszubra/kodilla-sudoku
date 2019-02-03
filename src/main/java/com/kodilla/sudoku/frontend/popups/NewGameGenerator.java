@@ -2,6 +2,11 @@ package com.kodilla.sudoku.frontend.popups;
 
 import com.kodilla.sudoku.backend.assets.InitialGameData;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
+import com.kodilla.sudoku.backend.exceptions.PlayerNotFoundException;
+import com.kodilla.sudoku.backend.password.hasher.PasswordHasher;
+import com.kodilla.sudoku.backend.password.hasher.Sha512Hasher;
+import com.kodilla.sudoku.backend.player.Player;
+import com.kodilla.sudoku.backend.player.PlayerDao;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,17 +14,26 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class NewGameBox {
+@Service
+public class NewGameGenerator {
+    @Autowired
+    private PlayerDao playerDao;
 
-    private static final int ONE = 1;
-    private static InitialGameData initialGameData;
-    private static final String EXPLANATION = "Difficulty levels differs in number of pre-filled fields. \r\n" +
+    private final int ONE = 1;
+    private InitialGameData initialGameData;
+    private final String EXPLANATION = "Difficulty levels differs in number of pre-filled fields. \r\n" +
                                                 "EASY: 30 filled fields \r\n" +
                                                 "MEDIUM: 20 filled fields \r\n" +
                                                 "HARD: 10 filled fields";
 
-    public static InitialGameData getUserPreference() {
+    private TextField inputLogin = new TextField();
+    private PasswordField inputPassword = new PasswordField();
+
+
+    public InitialGameData getUserPreference() {
 
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL); //below windows can't be entered before dealing with this one
@@ -30,13 +44,11 @@ public class NewGameBox {
         Label nameField = new Label();
         nameField.setText("Login:");
 
-        TextField inputLogin = new TextField();
         inputLogin.setMaxWidth(window.getWidth() * 0.5);
 
         Label passwordField = new Label();
         passwordField.setText("Password:");
 
-        PasswordField inputPassword = new PasswordField();
         inputPassword.setMaxWidth(window.getWidth() * 0.5);
 
         Label difficultyLevelChoice = new Label();
@@ -59,7 +71,7 @@ public class NewGameBox {
                     initialGameData = new InitialGameData(inputLogin.getText(), difficultyLevelChoiceBox.getValue());
                     window.close();
                 } else {
-                    //TODO: when login fails
+                    MessageBox.displayMessage("Login Failed", "Given login does not exist or password is not correct");
                 }
 
             }
@@ -79,14 +91,25 @@ public class NewGameBox {
         return initialGameData;
     }
 
-    private static boolean isNotBlank(TextField inputTextField) {
+    private boolean isNotBlank(TextField inputTextField) {
         return inputTextField.getText().length() >= ONE;
     }
 
-    private static boolean validateLogin() {
-        boolean result = true;
-        //TODO: result = false +  login procedure that changes value to true if successful
+    private boolean validateLogin() {
+        PasswordHasher hasher = Sha512Hasher.getInstance();
 
-        return result;
+        String givenLogin = inputLogin.getText();
+        String givenPassword = inputPassword.getText();
+        String givenPasswordHashed = hasher.generateHashedPassword(givenPassword);
+
+        Player player = playerDao.getPlayerByUsername(givenLogin).orElseThrow(() -> new PlayerNotFoundException("Given player does not exist"));
+        String expectedPasswordHashed = player.getHashedPassword();
+
+        if (givenPasswordHashed.equals(expectedPasswordHashed)) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
