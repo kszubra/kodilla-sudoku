@@ -13,6 +13,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedQuery(
+        name = "Player.getPlayerByUsername",
+        query = "FROM Player WHERE username = :USERNAME"
+)
+
 @Entity
 @Table(name="PLAYERS")
 @NoArgsConstructor

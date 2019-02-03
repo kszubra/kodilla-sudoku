@@ -50,7 +50,31 @@ public class PlayerDaoTestSuite {
 
         //when
         playerDao.save(testPlayer);
-        Player loadedPlayer = playerDao.findById(2).orElseThrow(()-> new PlayerNotFoundException("Given player was not found"));
+        Player loadedPlayer = playerDao.findById(2).orElseThrow(()-> new PlayerNotFoundException("Player with given ID does not exist"));
+
+        //then
+        Assert.assertTrue(loadedPlayer.getUsername().equals("TestPlayer"));
+
+        //cleanup
+        playerDao.delete(testPlayer);
+
+    }
+
+    @Test
+    public void testGettingPlayerByUsername() {
+        //given
+        PasswordHasher hasher = Sha512Hasher.getInstance();
+        Player testPlayer = new Player();
+        String username = "TestPlayer";
+        String securePassword = hasher.generateHashedPassword("TestPassword");
+        LocalDate registered = LocalDate.now();
+        testPlayer.setUsername(username);
+        testPlayer.setHashedPassword(securePassword);
+        testPlayer.setRegistrationDate(registered);
+
+        //when
+        playerDao.save(testPlayer);
+        Player loadedPlayer = playerDao.getPlayerByUsername("TestPlayer").orElseThrow(() -> new PlayerNotFoundException("Player of given username doesn not exist"));
 
         //then
         Assert.assertTrue(loadedPlayer.getUsername().equals("TestPlayer"));
