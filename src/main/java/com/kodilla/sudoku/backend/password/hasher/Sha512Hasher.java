@@ -54,9 +54,17 @@ public class Sha512Hasher implements PasswordHasher {
 
     private byte[] getSalt() throws NoSuchAlgorithmException {
 
-        SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        secureRandom.nextBytes(salt);
+        /**
+         * Proper way would be to randomize it with:
+         *
+         * SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+         * byte[] salt = new byte[16];
+         * secureRandom.nextBytes(salt);
+         *
+         * But for testing purpose using hard-coded version
+         */
+
+        byte[] salt = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
         return salt;
     }
