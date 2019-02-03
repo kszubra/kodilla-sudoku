@@ -26,6 +26,7 @@ import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import java.util.Map;
 
 @SpringBootApplication
 public class SudokuApplication extends Application {
+    private static ConfigurableApplicationContext context;
     @Autowired
     ProfileGenerator profileGenerator;
 
@@ -258,6 +260,8 @@ public class SudokuApplication extends Application {
 
     @Override
     public void start(Stage window) {
+        ProfileGenerator profileGenerator = context.getBean(ProfileGenerator.class);
+
         boolean login = LoginOrRegisterBox.getDecision();
         if(login) {
             startNewGame(NewGameBox.getUserPreference());
@@ -284,8 +288,7 @@ public class SudokuApplication extends Application {
     }
 
     public static void main(String[] args) {
-
-        SpringApplication.run(SudokuApplication.class, args);
+        context = SpringApplication.run(SudokuApplication.class, args);
         launch(args);
 
     }
