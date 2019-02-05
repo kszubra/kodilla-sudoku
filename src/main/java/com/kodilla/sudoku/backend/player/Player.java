@@ -13,10 +13,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@NamedQuery(
-        name = "Player.getPlayerByUsername",
-        query = "FROM Player WHERE username = :USERNAME"
-)
+@NamedQueries({
+        @NamedQuery(
+                name="Player.getPlayerByUsername",
+                query = "FROM Player WHERE username = :USERNAME"
+        )
+
+})
+
+
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name="Player.updateLastLoginById",
+                query="UPDATE PLAYERS SET LAST_LOGIN = curdate() WHERE id= CONCAT(:PLAYER_ID, '; commit;')"
+        )
+
+})
 
 @Entity
 @Table(name="PLAYERS")

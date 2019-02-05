@@ -123,6 +123,8 @@ public class NewGameGenerator {
         String expectedPasswordHashed = player.getHashedPassword();
 
         if (givenPasswordHashed.equals(expectedPasswordHashed)) {
+            int id = player.getUserID();
+            playerDao.updateLastLoginById(id);
             return true;
         } else {
             return false;

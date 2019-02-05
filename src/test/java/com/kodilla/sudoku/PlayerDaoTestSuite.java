@@ -81,6 +81,34 @@ public class PlayerDaoTestSuite {
 
         //cleanup
         playerDao.delete(testPlayer);
+    }
+
+    @Test
+    public void testUpdatingLoginDate() {
+        //given
+        PasswordHasher hasher = Sha512Hasher.getInstance();
+        Player testPlayer = new Player();
+        String username = "JohnRambo";
+        String securePassword = hasher.generateHashedPassword("TestPassword");
+        LocalDate registered = LocalDate.now();
+        testPlayer.setUsername(username);
+        testPlayer.setHashedPassword(securePassword);
+        testPlayer.setRegistrationDate(registered);
+
+        //when
+        playerDao.save(testPlayer);
+        Player loadedPlayer = playerDao.getPlayerByUsername("JohnRambo").orElseThrow(() -> new PlayerNotFoundException("Player of given username doesn not exist"));
+        int id = loadedPlayer.getUserID();
+
+        playerDao.updateLastLoginById(id);
+
+
+        //then
+        Assert.assertTrue(loadedPlayer.getUsername().equals("TestPlayer"));
+
+        //cleanup
+        //playerDao.delete(testPlayer);
+
 
     }
 }

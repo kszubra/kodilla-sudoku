@@ -1,5 +1,6 @@
 package com.kodilla.sudoku.backend.player;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,5 +15,8 @@ public interface PlayerDao extends CrudRepository<Player, Integer> {
 
     @Query
     Optional<Player> getPlayerByUsername(@Param("USERNAME") String username);
+
+    @Modifying
+    void updateLastLoginById(@Param("PLAYER_ID") int id);
 
 }
