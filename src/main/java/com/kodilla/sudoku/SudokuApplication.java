@@ -10,6 +10,7 @@ import com.kodilla.sudoku.frontend.popups.LoginOrRegisterBox;
 import com.kodilla.sudoku.frontend.popups.MessageBox;
 import com.kodilla.sudoku.frontend.popups.NewGameGenerator;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,7 +21,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,19 +62,29 @@ public class SudokuApplication extends Application {
         NewGameGenerator newGameGenerator = context.getBean(NewGameGenerator.class);
 
         solveButton = new Button("Solve");
-        solveButton.setOnMouseClicked(e -> solveBoard());
+        solveButton.setOnMouseClicked(e -> {
+            handleEndGame(false);
+            solveBoard();
+        });
         solveButton.setPrefWidth(BUTTON_WIDTH);
         solveButton.setTextFill(Color.web("#b299e6"));
         solveButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
         changeUserButton = new Button("Switch user");
-        changeUserButton.setOnMouseClicked(e -> startNewGame(newGameGenerator.getUserPreference()));
+        changeUserButton.setOnMouseClicked(e -> {
+            handleEndGame(false);
+            startNewGame(newGameGenerator.getUserPreference());
+        });
         changeUserButton.setPrefWidth(BUTTON_WIDTH);
         changeUserButton.setTextFill(Color.web("#b299e6"));
         changeUserButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
         newBoardButton = new Button("Generate new board");
-        newBoardButton.setOnMouseClicked(e -> setNewBoard());
+        newBoardButton.setOnMouseClicked(e -> {
+            handleEndGame(false);
+            setNewBoard();
+            this.timer = new Timer(timerDisplay);
+        });
         newBoardButton.setPrefWidth(BUTTON_WIDTH);
         newBoardButton.setTextFill(Color.web("#b299e6"));
         newBoardButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
@@ -83,23 +93,24 @@ public class SudokuApplication extends Application {
         exitButton.setTextFill(Color.web("#b299e6"));
         exitButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
         exitButton.setOnMouseClicked(e-> {
-            System.out.println(timer.stop());
+            handleEndGame(false);
             System.exit(0);
         });
         exitButton.setPrefWidth(BUTTON_WIDTH);
 
         rightPanel = new VBox(solveButton, newBoardButton, changeUserButton, exitButton);
         rightPanel.setAlignment(Pos.CENTER);
+        rightPanel.setSpacing(10);
     }
 
     private void initializeTopPanel() {
         playerDisplay = new Label();
         playerDisplay.setTextFill(Color.web("#b299e6"));
-        playerDisplay.setStyle("-fx-background-color: #29293d;");
+        playerDisplay.setStyle("-fx-background-color: #29293d; -fx-font-size: 20px");
 
         timerDisplay = new Label();
         timerDisplay.setTextFill(Color.web("#b299e6"));
-        timerDisplay.setStyle("-fx-background-color: #29293d;");
+        timerDisplay.setStyle("-fx-background-color: #29293d; -fx-font-size: 20px");
 
 
         topPanel = new VBox(playerDisplay, timerDisplay);
@@ -226,13 +237,17 @@ public class SudokuApplication extends Application {
 
             if(isGameComplete()) {
                 MessageBox.displayMessage("Congratulations!", "Congratulations, you completed the puzzle");
-                handleEndGame();
+                handleEndGame(true);
             }
         }
 
     }
 
-    private void handleEndGame() {
+    private void handleEndGame(boolean playerSolved) {
+        Long gameTime = timer.stop();
+        String playerName = currentGame.getPlayerName();
+        DifficultyLevel difficultyLevel = currentGame.getDifficultyLevel();
+
         // TODO: handle setting score, saving it ect. etc.
     }
 

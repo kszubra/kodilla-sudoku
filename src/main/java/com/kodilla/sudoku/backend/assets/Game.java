@@ -1,7 +1,6 @@
 package com.kodilla.sudoku.backend.assets;
 
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
-import com.kodilla.sudoku.backend.player.Player;
 import com.kodilla.sudoku.backend.score.Score;
 import lombok.Getter;
 import lombok.Setter;
