@@ -1,9 +1,6 @@
 package com.kodilla.sudoku;
 
-import com.kodilla.sudoku.backend.assets.BoardCoordinates;
-import com.kodilla.sudoku.backend.assets.Game;
-import com.kodilla.sudoku.backend.assets.InitialGameData;
-import com.kodilla.sudoku.backend.assets.SudokuBoard;
+import com.kodilla.sudoku.backend.assets.*;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
@@ -44,6 +41,8 @@ public class SudokuApplication extends Application {
     private static final int BOARD_LINE_SIZE = 9;
     private final double BUTTON_WIDTH = 150;
 
+    private Timer timer = null;
+
     private Map<BoardCoordinates, TextField> userInterfaceFieldsMap = new HashMap<>();
     private Game currentGame;
     private AutoSolver solver = new BSolver();
@@ -71,7 +70,10 @@ public class SudokuApplication extends Application {
         newBoardButton.setPrefWidth(BUTTON_WIDTH);
 
         exitButton = new Button("Exit");
-        exitButton.setOnMouseClicked(e->System.exit(0));
+        exitButton.setOnMouseClicked(e-> {
+            System.out.println(timer.stop());
+            System.exit(0);
+        });
         exitButton.setPrefWidth(BUTTON_WIDTH);
 
         rightPanel = new VBox(solveButton, newBoardButton, changeUserButton, exitButton);
@@ -260,6 +262,8 @@ public class SudokuApplication extends Application {
     public void startNewGame(InitialGameData initalData) {
         currentGame = new Game(initalData);
         boardValuesToUi();
+        this.timer = new Timer();
+
     }
 
     @Override

@@ -13,7 +13,7 @@ public class Game {
     private SudokuBoard gameBoard = new SudokuBoard();
     private DifficultyLevel difficultyLevel;
     private Player gamePlayer = new Player();
-    private Score gameScore = new Score();;
+    private Score gameScore = new Score();
     private boolean isComplete;
 
     public Game(InitialGameData initialData) {
