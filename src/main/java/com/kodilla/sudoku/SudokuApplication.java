@@ -13,11 +13,14 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +54,8 @@ public class SudokuApplication extends Application {
     private GridPane boardFieldsPane = new GridPane();
 
     private Button solveButton, newBoardButton, changeUserButton, exitButton;
-    private VBox rightPanel;
+    private VBox rightPanel, topPanel;
+    private Label playerDisplay, timerDisplay;
 
 
     private void initializeRightPanel() {
@@ -60,16 +64,24 @@ public class SudokuApplication extends Application {
         solveButton = new Button("Solve");
         solveButton.setOnMouseClicked(e -> solveBoard());
         solveButton.setPrefWidth(BUTTON_WIDTH);
+        solveButton.setTextFill(Color.web("#b299e6"));
+        solveButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
         changeUserButton = new Button("Switch user");
         changeUserButton.setOnMouseClicked(e -> startNewGame(newGameGenerator.getUserPreference()));
         changeUserButton.setPrefWidth(BUTTON_WIDTH);
+        changeUserButton.setTextFill(Color.web("#b299e6"));
+        changeUserButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
         newBoardButton = new Button("Generate new board");
         newBoardButton.setOnMouseClicked(e -> setNewBoard());
         newBoardButton.setPrefWidth(BUTTON_WIDTH);
+        newBoardButton.setTextFill(Color.web("#b299e6"));
+        newBoardButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
         exitButton = new Button("Exit");
+        exitButton.setTextFill(Color.web("#b299e6"));
+        exitButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
         exitButton.setOnMouseClicked(e-> {
             System.out.println(timer.stop());
             System.exit(0);
@@ -78,6 +90,20 @@ public class SudokuApplication extends Application {
 
         rightPanel = new VBox(solveButton, newBoardButton, changeUserButton, exitButton);
         rightPanel.setAlignment(Pos.CENTER);
+    }
+
+    private void initializeTopPanel() {
+        playerDisplay = new Label();
+        playerDisplay.setTextFill(Color.web("#b299e6"));
+        playerDisplay.setStyle("-fx-background-color: #29293d;");
+
+        timerDisplay = new Label();
+        timerDisplay.setTextFill(Color.web("#b299e6"));
+        timerDisplay.setStyle("-fx-background-color: #29293d;");
+
+
+        topPanel = new VBox(playerDisplay, timerDisplay);
+        topPanel.setAlignment(Pos.CENTER);
     }
 
     private void solveBoard() {
@@ -262,7 +288,8 @@ public class SudokuApplication extends Application {
     public void startNewGame(InitialGameData initalData) {
         currentGame = new Game(initalData);
         boardValuesToUi();
-        this.timer = new Timer();
+        this.timer = new Timer(timerDisplay);
+        playerDisplay.setText("Player: " + currentGame.getPlayerName());
 
     }
 
@@ -270,6 +297,7 @@ public class SudokuApplication extends Application {
     public void start(Stage window) {
         ProfileGenerator profileGenerator = context.getBean(ProfileGenerator.class);
         NewGameGenerator newGameGenerator = context.getBean(NewGameGenerator.class);
+        initializeTopPanel();
 
         boolean login = LoginOrRegisterBox.getDecision();
         if(login) {
@@ -283,7 +311,8 @@ public class SudokuApplication extends Application {
         initializeRightPanel();
         windowMainGridPane.setCenter(boardFieldsPane);
         windowMainGridPane.setRight(rightPanel);
-        windowMainGridPane.setStyle("-fx-background-color: #121221");
+        windowMainGridPane.setStyle("-fx-background-color: #29293d;");
+        windowMainGridPane.setTop(topPanel);
 
         Scene scene = new Scene(windowMainGridPane, 300, 300);
 

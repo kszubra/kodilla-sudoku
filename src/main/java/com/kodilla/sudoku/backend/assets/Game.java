@@ -12,7 +12,7 @@ public class Game {
 
     private SudokuBoard gameBoard = new SudokuBoard();
     private DifficultyLevel difficultyLevel;
-    private Player gamePlayer = new Player();
+    private String playerName;
     private Score gameScore = new Score();
     private boolean isComplete;
 
@@ -20,13 +20,8 @@ public class Game {
         this.isComplete = false;
         this.gameBoard.preFill(initialData.getDifficultyLevel());
         this.difficultyLevel = initialData.getDifficultyLevel();
+        this.playerName = initialData.getName();
     }
 
-    public Game() {
-        this.isComplete = false;
-        this.gamePlayer = new Player();
-        this.gameBoard = new SudokuBoard();
-        this.gameScore = new Score();
-        this.gameScore.setPlayer(gamePlayer);
-    }
+
 }
