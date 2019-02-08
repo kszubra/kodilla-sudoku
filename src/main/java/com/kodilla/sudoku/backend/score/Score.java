@@ -41,11 +41,4 @@ public class Score {
     @Column(name="COMPLETED")
     private boolean isCompleted;
 
-
-
-
-
-
-
-
 }

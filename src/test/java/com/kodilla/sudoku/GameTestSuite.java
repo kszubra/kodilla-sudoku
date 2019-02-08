@@ -1,7 +1,9 @@
 package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.assets.Game;
+import com.kodilla.sudoku.backend.assets.InitialGameData;
 import com.kodilla.sudoku.backend.assets.SudokuBoard;
+import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,7 +29,7 @@ public class GameTestSuite {
         System.out.println("new game and changing board");
 
         //given
-        Game testGame = new Game();
+        Game testGame = new Game(new InitialGameData("X", DifficultyLevel.HARD));
         SudokuBoard independentBoard = new SudokuBoard();
 
         //when

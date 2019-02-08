@@ -4,13 +4,17 @@ import com.kodilla.sudoku.backend.assets.*;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
+import com.kodilla.sudoku.backend.exceptions.PlayerNotFoundException;
 import com.kodilla.sudoku.backend.exceptions.WrongInputException;
+import com.kodilla.sudoku.backend.player.Player;
+import com.kodilla.sudoku.backend.player.PlayerDao;
+import com.kodilla.sudoku.backend.score.Score;
+import com.kodilla.sudoku.backend.score.ScoreDao;
 import com.kodilla.sudoku.frontend.popups.ProfileGenerator;
 import com.kodilla.sudoku.frontend.popups.LoginOrRegisterBox;
 import com.kodilla.sudoku.frontend.popups.MessageBox;
 import com.kodilla.sudoku.frontend.popups.NewGameGenerator;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +32,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +46,10 @@ public class SudokuApplication extends Application {
     ProfileGenerator profileGenerator;
     @Autowired
     NewGameGenerator newGameGenerator;
+    @Autowired
+    ScoreDao scoreDao;
+    @Autowired
+    PlayerDao playerDao;
 
     private static final int BOARD_LINE_SIZE = 9;
     private final double BUTTON_WIDTH = 150;
@@ -93,13 +103,12 @@ public class SudokuApplication extends Application {
         exitButton.setTextFill(Color.web("#b299e6"));
         exitButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
         exitButton.setOnMouseClicked(e-> {
-            handleEndGame(false);
             System.exit(0);
         });
         exitButton.setPrefWidth(BUTTON_WIDTH);
 
         rightPanel = new VBox(solveButton, newBoardButton, changeUserButton, exitButton);
-        rightPanel.setAlignment(Pos.CENTER);
+        rightPanel.setAlignment(Pos.TOP_CENTER);
         rightPanel.setSpacing(10);
     }
 
@@ -136,7 +145,7 @@ public class SudokuApplication extends Application {
             }
         }
 
-        boardFieldsPane.setAlignment(Pos.CENTER);
+        boardFieldsPane.setAlignment(Pos.TOP_CENTER);
         boardValuesToUi();
         setFieldsBorders();
 
@@ -246,9 +255,16 @@ public class SudokuApplication extends Application {
     private void handleEndGame(boolean playerSolved) {
         Long gameTime = timer.stop();
         String playerName = currentGame.getPlayerName();
-        DifficultyLevel difficultyLevel = currentGame.getDifficultyLevel();
 
-        // TODO: handle setting score, saving it ect. etc.
+        // TODO: saving score
+        Player playerToSave = playerDao.getPlayerByUsername(playerName).orElseThrow(() -> new PlayerNotFoundException("Player was not found"));
+        Score scoreToSave = new Score();
+        scoreToSave.setPlayer(playerToSave);
+        scoreToSave.setDuration(gameTime);
+        scoreToSave.setCompleted(playerSolved);
+        scoreToSave.setAchieveDate(LocalDate.now());
+        scoreDao.save(scoreToSave);
+
     }
 
     private boolean isGameComplete() {
@@ -312,6 +328,10 @@ public class SudokuApplication extends Application {
     public void start(Stage window) {
         ProfileGenerator profileGenerator = context.getBean(ProfileGenerator.class);
         NewGameGenerator newGameGenerator = context.getBean(NewGameGenerator.class);
+        playerDao = context.getBean(PlayerDao.class);
+        scoreDao = context.getBean(ScoreDao.class);
+
+
         initializeTopPanel();
 
         boolean login = LoginOrRegisterBox.getDecision();
