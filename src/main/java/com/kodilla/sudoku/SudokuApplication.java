@@ -257,13 +257,16 @@ public class SudokuApplication extends Application {
         String playerName = currentGame.getPlayerName();
 
         // TODO: saving score
-        Player playerToSave = playerDao.getPlayerByUsername(playerName).orElseThrow(() -> new PlayerNotFoundException("Player was not found"));
-        Score scoreToSave = new Score();
-        scoreToSave.setPlayer(playerToSave);
-        scoreToSave.setDuration(gameTime);
-        scoreToSave.setCompleted(playerSolved);
-        scoreToSave.setAchieveDate(LocalDate.now());
-        scoreDao.save(scoreToSave);
+        if (!currentGame.isSaved()) {
+            Player playerToSave = playerDao.getPlayerByUsername(playerName).orElseThrow(() -> new PlayerNotFoundException("Player was not found"));
+            Score scoreToSave = new Score();
+            scoreToSave.setPlayer(playerToSave);
+            scoreToSave.setDuration(gameTime);
+            scoreToSave.setCompleted(playerSolved);
+            scoreToSave.setAchieveDate(LocalDate.now());
+            scoreDao.save(scoreToSave);
+            currentGame.setSaved(true);
+        }
 
     }
 
