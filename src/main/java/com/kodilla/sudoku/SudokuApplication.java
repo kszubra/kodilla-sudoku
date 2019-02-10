@@ -6,7 +6,6 @@ import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import com.kodilla.sudoku.backend.exceptions.PlayerNotFoundException;
-import com.kodilla.sudoku.backend.exceptions.WrongInputException;
 import com.kodilla.sudoku.backend.player.Player;
 import com.kodilla.sudoku.backend.player.PlayerDao;
 import com.kodilla.sudoku.backend.score.Score;
@@ -16,15 +15,13 @@ import com.kodilla.sudoku.frontend.popups.LoginOrRegisterBox;
 import com.kodilla.sudoku.frontend.popups.MessageBox;
 import com.kodilla.sudoku.frontend.popups.NewGameGenerator;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -35,7 +32,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.time.LocalDate;
 import java.util.*;
-
 
 @SpringBootApplication
 public class SudokuApplication extends Application {
@@ -51,11 +47,12 @@ public class SudokuApplication extends Application {
 
     private static final int BOARD_LINE_SIZE = 9;
     private final double BUTTON_WIDTH = 150;
+    private final int FIELD_WIDTH = 30;
 
     private Timer timer = null;
 
     private Map<BoardCoordinates, Label> userInterfaceFieldsMap = new HashMap<>();
-    private BoardCoordinates currentlyChoosenFieldCoordinates;
+    private BoardCoordinates currentlyChoosenFieldCoordinates = new BoardCoordinates(0,0);
     private List<BoardCoordinates> preFilledFieldCoordinates;
     private Game currentGame;
     private AutoSolver solver = new BSolver();
@@ -124,6 +121,8 @@ public class SudokuApplication extends Application {
             virtualKeys[i].setTextFill(Color.web("#b299e6"));
             virtualKeys[i].setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
             virtualKeys[i].setPrefWidth(BUTTON_WIDTH/3);
+            virtualKeys[i].setOnMouseClicked(e -> handleKeyClick(e));
+
         }
 
         virtualKeyboardPane.setAlignment(Pos.CENTER);
@@ -185,9 +184,11 @@ public class SudokuApplication extends Application {
         boardFieldsPane.add(inputField, fieldCoordinates.getColumn(), fieldCoordinates.getRow());
         inputField.setText("0");
         inputField.setAlignment(Pos.CENTER);
-        inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-color: #29293d;");
+        inputField.setTextFill(Color.web("#b299e6"));
+        inputField.setStyle("-fx-background-color: #29293d;");
+        inputField.setPrefWidth(FIELD_WIDTH);
 
-        inputField.setOnKeyReleased(e->handleFieldInput(e));
+        inputField.setOnMouseClicked(e->handleFieldSelection(e));
     }
 
     private void setFieldsBorders() {
@@ -218,45 +219,36 @@ public class SudokuApplication extends Application {
         }
     }
 
-    private void handleFieldInput(KeyEvent event) {
-        TextField eventObject = (TextField) event.getSource();
+    private void handleKeyClick(MouseEvent event) {
+        Button eventObject = (Button) event.getSource();
 
         /**
          * Allow actions only on editable fields
          */
+        if( !preFilledFieldCoordinates.contains(currentlyChoosenFieldCoordinates) ) {
+            int row = currentlyChoosenFieldCoordinates.getRow();
+            int column = currentlyChoosenFieldCoordinates.getColumn();
+            int keyValue = Integer.parseInt(eventObject.getText());
 
-        if( eventObject.isEditable() ) {
-            int fieldRow = GridPane.getRowIndex(eventObject);
-            int fieldColumn = GridPane.getColumnIndex(eventObject);
+            if( keyValue == 0 ) {
+                currentGame.getGameBoard().ereaseFieldValue(row, column);
+                userInterfaceFieldsMap.get(currentlyChoosenFieldCoordinates).setText("0");
+            }
 
-            String inputValue = eventObject.getText();
-            System.out.println(inputValue);
-
-
-                       /**
-             * if input is 0 or null - reset field in the board
+            /**
+             * if value is not 0 - try to putting it on the game board
              */
 
-            if( inputValue.isEmpty() | inputValue.equals("0") ) {
-                eventObject.setText("0");
-                currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
+            else if (currentGame.getGameBoard().setFieldValue(row, column, keyValue)) {
+                userInterfaceFieldsMap.get(currentlyChoosenFieldCoordinates).setText(eventObject.getText());
 
             }
 
             /**
-             * if value is proper and not 0 - try to putting it on the game board
-             */
-
-            else if (currentGame.getGameBoard().setFieldValue(fieldRow, fieldColumn, Integer.parseInt(inputValue))) {
-
-            }
-
-            /**
-             * if value is not available for the field, display 0 on UI
+             * if value is not available for the field, show error
              */
 
             else {
-                eventObject.setText("0");
                 MessageBox.displayMessage("Value not available", "This value is not available in this field");
             }
 
@@ -265,6 +257,32 @@ public class SudokuApplication extends Application {
                 handleEndGame(true);
             }
         }
+    }
+
+    private void handleFieldSelection(MouseEvent event) {
+        Label eventObject = (Label) event.getSource();
+        int fieldRow = GridPane.getRowIndex(eventObject);
+        int fieldColumn = GridPane.getColumnIndex(eventObject);
+        BoardCoordinates selectedCoordinates = new BoardCoordinates(fieldRow, fieldColumn);
+
+        //remove bg from previous selection. Using weird construction because changing background with CSS changes border too
+        userInterfaceFieldsMap.get(currentlyChoosenFieldCoordinates)
+                .setBackground(new Background(new BackgroundFill(Color.rgb(41, 41, 61), CornerRadii.EMPTY, Insets.EMPTY)));//#29293d
+        //set current selection
+        currentlyChoosenFieldCoordinates = selectedCoordinates;
+
+        /**
+         * Allow actions only on editable fields
+         */
+
+        if( !preFilledFieldCoordinates.contains(currentlyChoosenFieldCoordinates) ) {
+
+            eventObject.setBackground(new Background(new BackgroundFill(Color.rgb(76, 76, 119), CornerRadii.EMPTY, Insets.EMPTY)));
+
+            String inputValue = eventObject.getText();
+            System.out.println(inputValue);
+
+        }
 
     }
 
@@ -272,7 +290,6 @@ public class SudokuApplication extends Application {
         Long gameTime = timer.stop();
         String playerName = currentGame.getPlayerName();
 
-        // TODO: saving score
         if (!currentGame.isSaved()) {
             Player playerToSave = playerDao.getPlayerByUsername(playerName).orElseThrow(() -> new PlayerNotFoundException("Player was not found"));
             Score scoreToSave = new Score();
@@ -294,23 +311,6 @@ public class SudokuApplication extends Application {
         } else {
             currentGame.setComplete(false);
             return false;
-        }
-    }
-
-    private boolean validateFieldInputFormat(String input) {
-
-        if(input.isEmpty()) {
-            return true;
-        }
-
-        char firstCharacter = input.charAt(0);
-
-        if( !Character.isDigit(firstCharacter) ) {
-            return false;
-        } else if (input.length() > 1) {
-            return false;
-        } else {
-            return true;
         }
     }
 
