@@ -1,6 +1,7 @@
 package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.assets.*;
+import com.kodilla.sudoku.backend.assets.Timer;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
@@ -33,9 +34,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @SpringBootApplication
@@ -55,7 +54,9 @@ public class SudokuApplication extends Application {
 
     private Timer timer = null;
 
-    private Map<BoardCoordinates, TextField> userInterfaceFieldsMap = new HashMap<>();
+    private Map<BoardCoordinates, Label> userInterfaceFieldsMap = new HashMap<>();
+    private BoardCoordinates currentlyChoosenFieldCoordinates;
+    private List<BoardCoordinates> preFilledFieldCoordinates;
     private Game currentGame;
     private AutoSolver solver = new BSolver();
 
@@ -179,10 +180,10 @@ public class SudokuApplication extends Application {
     }
 
     private void generateInputGameField(BoardCoordinates fieldCoordinates) {
-        TextField inputField = new TextField();
+        Label inputField = new Label();
         userInterfaceFieldsMap.put(fieldCoordinates, inputField);
         boardFieldsPane.add(inputField, fieldCoordinates.getColumn(), fieldCoordinates.getRow());
-        inputField.setPromptText("0");
+        inputField.setText("0");
         inputField.setAlignment(Pos.CENTER);
         inputField.setStyle("-fx-text-inner-color: #b299e6; -fx-background-color: #29293d; -fx-border-color: #29293d;");
 
@@ -190,7 +191,7 @@ public class SudokuApplication extends Application {
     }
 
     private void setFieldsBorders() {
-        for(Map.Entry<BoardCoordinates, TextField> entry : userInterfaceFieldsMap.entrySet()) {
+        for(Map.Entry<BoardCoordinates, Label> entry : userInterfaceFieldsMap.entrySet()) {
 
             int row = entry.getKey().getRow();
             int column = entry.getKey().getColumn();
@@ -232,23 +233,11 @@ public class SudokuApplication extends Application {
             System.out.println(inputValue);
 
 
-            /**
-             * Check if value has proper format, if not - set it to 0 in UI
-             */
-            if(! validateFieldInputFormat(inputValue) ) {
-                MessageBox.displayMessage("Wrong value", "Input value should be a single number (1-9)");
-                eventObject.setText("0");
-                currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
-
-                throw new WrongInputException("Input value should be a single number (1-9)");
-
-            }
-
-            /**
+                       /**
              * if input is 0 or null - reset field in the board
              */
 
-            else if( inputValue.isEmpty() | inputValue.equals("0") ) {
+            if( inputValue.isEmpty() | inputValue.equals("0") ) {
                 eventObject.setText("0");
                 currentGame.getGameBoard().ereaseFieldValue(fieldRow, fieldColumn);
 
@@ -326,12 +315,13 @@ public class SudokuApplication extends Application {
     }
 
     private void boardValuesToUi() {
+        preFilledFieldCoordinates = new ArrayList<>();
         SudokuBoard sourceBoard = currentGame.getGameBoard();
         int[][] array = sourceBoard.getStartingBoard();
         Arrays.stream(array)
                 .forEach(e-> System.out.println(Arrays.toString(e)));
 
-        for(Map.Entry<BoardCoordinates, TextField> entry : userInterfaceFieldsMap.entrySet()) {
+        for(Map.Entry<BoardCoordinates, Label> entry : userInterfaceFieldsMap.entrySet()) {
             int row = entry.getKey().getRow();
             int column = entry.getKey().getColumn();
             int value = array[row][column];
@@ -340,7 +330,8 @@ public class SudokuApplication extends Application {
 
             entry.getValue().setText(String.valueOf(value));
             if(value !=0) {
-                entry.getValue().setEditable(false);
+                BoardCoordinates preFilledCoordinates = new BoardCoordinates(entry.getKey());
+                preFilledFieldCoordinates.add(preFilledCoordinates);
             }
         }
 
