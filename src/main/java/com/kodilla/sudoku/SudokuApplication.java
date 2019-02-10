@@ -33,7 +33,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,8 +61,11 @@ public class SudokuApplication extends Application {
 
     private BorderPane windowMainGridPane = new BorderPane();
     private GridPane boardFieldsPane = new GridPane();
+    private GridPane virtualKeyboardPane = new GridPane();
 
     private Button solveButton, newBoardButton, changeUserButton, exitButton;
+    private Button[] virtualKeys = new Button[10];
+
     private VBox rightPanel, topPanel;
     private Label playerDisplay, timerDisplay;
 
@@ -107,9 +109,34 @@ public class SudokuApplication extends Application {
         });
         exitButton.setPrefWidth(BUTTON_WIDTH);
 
-        rightPanel = new VBox(solveButton, newBoardButton, changeUserButton, exitButton);
+        initializeVirtualKeys();
+
+        rightPanel = new VBox(solveButton, newBoardButton, changeUserButton, exitButton, virtualKeyboardPane);
         rightPanel.setAlignment(Pos.TOP_CENTER);
         rightPanel.setSpacing(10);
+    }
+
+    private void initializeVirtualKeys() {
+
+        for (int i = 0; i<virtualKeys.length; i++) {
+            virtualKeys[i] = new Button(String.valueOf(i));
+            virtualKeys[i].setTextFill(Color.web("#b299e6"));
+            virtualKeys[i].setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+            virtualKeys[i].setPrefWidth(BUTTON_WIDTH/3);
+        }
+
+        virtualKeyboardPane.setAlignment(Pos.CENTER);
+        virtualKeyboardPane.add( virtualKeys[0],1 ,3);
+        virtualKeyboardPane.add( virtualKeys[1],0 ,2);
+        virtualKeyboardPane.add( virtualKeys[2],1 ,2);
+        virtualKeyboardPane.add( virtualKeys[3],2 ,2);
+        virtualKeyboardPane.add( virtualKeys[4],0 ,1);
+        virtualKeyboardPane.add( virtualKeys[5],1 ,1);
+        virtualKeyboardPane.add( virtualKeys[6],2 ,1);
+        virtualKeyboardPane.add( virtualKeys[7],0 ,0);
+        virtualKeyboardPane.add( virtualKeys[8],1, 0);
+        virtualKeyboardPane.add( virtualKeys[9],2 ,0);
+
     }
 
     private void initializeTopPanel() {
