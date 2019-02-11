@@ -47,7 +47,12 @@ public class SudokuApplication extends Application {
 
     private static final int BOARD_LINE_SIZE = 9;
     private final double BUTTON_WIDTH = 150;
-    private final int FIELD_WIDTH = 30;
+    private final double BOTTOM_BUTTONS_SPACING = 10;
+    private final double KEYBOARD_SPACING = 5;
+    private final double KEYBOARD_KEY_WIDTH = 50;
+    private final double FIELD_WIDTH = 40;
+    private final double WINDOW_HEIGHT = 300;
+    private final double WINDOW_WIDTH = (9 * FIELD_WIDTH) + (3 * KEYBOARD_KEY_WIDTH) + (4 * KEYBOARD_SPACING);
 
     private Timer timer = null;
 
@@ -65,10 +70,20 @@ public class SudokuApplication extends Application {
     private Button[] virtualKeys = new Button[10];
 
     private VBox rightPanel, topPanel;
+    private HBox bottomPanel;
     private Label playerDisplay, timerDisplay;
 
 
     private void initializeRightPanel() {
+
+
+        initializeVirtualKeys();
+
+        rightPanel = new VBox(virtualKeyboardPane);
+        rightPanel.setAlignment(Pos.TOP_CENTER);
+    }
+
+    private void initializeBottomPanel() {
         NewGameGenerator newGameGenerator = context.getBean(NewGameGenerator.class);
 
         solveButton = new Button("Solve");
@@ -77,8 +92,8 @@ public class SudokuApplication extends Application {
             solveBoard();
         });
         solveButton.setPrefWidth(BUTTON_WIDTH);
-        solveButton.setTextFill(Color.web("#b299e6"));
-        solveButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+        //solveButton.setTextFill(Color.web("#b299e6"));
+        //solveButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
         changeUserButton = new Button("Switch user");
         changeUserButton.setOnMouseClicked(e -> {
@@ -89,7 +104,7 @@ public class SudokuApplication extends Application {
         changeUserButton.setTextFill(Color.web("#b299e6"));
         changeUserButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
-        newBoardButton = new Button("Generate new board");
+        newBoardButton = new Button("New board");
         newBoardButton.setOnMouseClicked(e -> {
             handleEndGame(false);
             setNewBoard();
@@ -107,11 +122,9 @@ public class SudokuApplication extends Application {
         });
         exitButton.setPrefWidth(BUTTON_WIDTH);
 
-        initializeVirtualKeys();
-
-        rightPanel = new VBox(solveButton, newBoardButton, changeUserButton, exitButton, virtualKeyboardPane);
-        rightPanel.setAlignment(Pos.TOP_CENTER);
-        rightPanel.setSpacing(10);
+        bottomPanel = new HBox(solveButton, newBoardButton, changeUserButton, exitButton);
+        bottomPanel.setAlignment(Pos.CENTER);
+        bottomPanel.setSpacing(BOTTOM_BUTTONS_SPACING);
     }
 
     private void initializeVirtualKeys() {
@@ -120,12 +133,15 @@ public class SudokuApplication extends Application {
             virtualKeys[i] = new Button(String.valueOf(i));
             virtualKeys[i].setTextFill(Color.web("#b299e6"));
             virtualKeys[i].setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
-            virtualKeys[i].setPrefWidth(BUTTON_WIDTH/3);
+            virtualKeys[i].setPrefWidth(KEYBOARD_KEY_WIDTH);
+            virtualKeys[i].setAlignment(Pos.CENTER);
             virtualKeys[i].setOnMouseClicked(e -> handleKeyClick(e));
 
         }
 
         virtualKeyboardPane.setAlignment(Pos.CENTER);
+        virtualKeyboardPane.setHgap(KEYBOARD_SPACING);
+        virtualKeyboardPane.setVgap(KEYBOARD_SPACING);
         virtualKeyboardPane.add( virtualKeys[0],1 ,3);
         virtualKeyboardPane.add( virtualKeys[1],0 ,2);
         virtualKeyboardPane.add( virtualKeys[2],1 ,2);
@@ -186,7 +202,7 @@ public class SudokuApplication extends Application {
         inputField.setAlignment(Pos.CENTER);
         inputField.setTextFill(Color.web("#b299e6"));
         inputField.setStyle("-fx-background-color: #29293d;");
-        inputField.setPrefWidth(FIELD_WIDTH);
+        inputField.setMinSize(FIELD_WIDTH, FIELD_WIDTH);
 
         inputField.setOnMouseClicked(e->handleFieldSelection(e));
     }
@@ -364,18 +380,21 @@ public class SudokuApplication extends Application {
         }
 
         initializeUiBoard();
+        initializeBottomPanel();
         initializeRightPanel();
+        windowMainGridPane.setBottom(bottomPanel);
         windowMainGridPane.setCenter(boardFieldsPane);
         windowMainGridPane.setRight(rightPanel);
-        windowMainGridPane.setStyle("-fx-background-color: #29293d;");
         windowMainGridPane.setTop(topPanel);
+        windowMainGridPane.setStyle("-fx-background-color: #29293d;");
 
         Scene scene = new Scene(windowMainGridPane, 300, 300);
+        scene.getStylesheets().add("com/kodilla/sudoku/Sudoku.css");
 
         window.setTitle("Sudoku");
         window.setResizable(true);
         window.setHeight(400);
-        window.setWidth(450);
+        window.setMinWidth(WINDOW_WIDTH);
         window.initStyle(StageStyle.DECORATED);
         window.setScene(scene);
         window.show();
