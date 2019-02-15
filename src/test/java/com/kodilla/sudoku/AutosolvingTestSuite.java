@@ -3,11 +3,9 @@ package com.kodilla.sudoku;
 import com.kodilla.sudoku.backend.assets.SudokuBoard;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
+@Ignore
 public class AutosolvingTestSuite {
     private SudokuBoard testBoard;
     private static int testNumber = 0;

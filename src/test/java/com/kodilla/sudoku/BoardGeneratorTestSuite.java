@@ -3,11 +3,9 @@ package com.kodilla.sudoku;
 import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.generator.BoardGenerator;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
+@Ignore
 public class BoardGeneratorTestSuite {
     private static int testNumber = 0;
 

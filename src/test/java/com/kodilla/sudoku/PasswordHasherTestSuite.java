@@ -2,11 +2,9 @@ package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.password.hasher.PasswordHasher;
 import com.kodilla.sudoku.backend.password.hasher.Sha512Hasher;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
+@Ignore
 public class PasswordHasherTestSuite {
     private static int testNumber = 0;
 

@@ -42,10 +42,9 @@ public class ProfileGenerator {
         Label loginField = new Label();
         loginField.setText("Login:");
         loginField.setTextFill(Color.web("#b299e6"));
-        loginField.setStyle("-fx-background-color: #29293d;");
 
         TextField inputLogin = new TextField();
-        inputLogin.setStyle("-fx-background-color: #9e8fbc");
+        //inputLogin.setStyle("-fx-background-color: #9e8fbc");
         inputLogin.textProperty().addListener((obs, oldText, newText) -> {
 
             try {
@@ -67,19 +66,16 @@ public class ProfileGenerator {
         Label passwordField = new Label();
         passwordField.setText("Password:");
         passwordField.setTextFill(Color.web("#b299e6"));
-        passwordField.setStyle("-fx-background-color: #29293d;");
 
         PasswordField inputPassword = new PasswordField();
         inputPassword.setMaxWidth(window.getWidth() * 0.5);
-        inputPassword.setStyle("-fx-background-color: #9e8fbc");
 
         Label confirmPasswordField = new Label();
         confirmPasswordField.setText("Confirm password:");
         confirmPasswordField.setTextFill(Color.web("#b299e6"));
-        confirmPasswordField.setStyle("-fx-background-color: #29293d;");
 
         PasswordField inputConfirmPassword = new PasswordField();
-        inputConfirmPassword.setStyle("-fx-background-color: #9e8fbc");
+        //inputConfirmPassword.setStyle("-fx-background-color: #9e8fbc");
         inputConfirmPassword.textProperty().addListener((obs, oldText, newText) -> {
 
             if ( newText.equals(inputPassword.getText()) ) {
@@ -93,8 +89,6 @@ public class ProfileGenerator {
 
         Button confirmButton = new Button();
         confirmButton.setText("Create");
-        confirmButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
-        confirmButton.setTextFill(Color.web("#b299e6"));
         confirmButton.setOnMouseClicked(e -> {
 
             if (isNotBlank(inputLogin)
@@ -124,9 +118,9 @@ public class ProfileGenerator {
         windowLayout.setSpacing(10);
         windowLayout.setPadding(new Insets(5, 5, 5, 5));
         windowLayout.setAlignment(Pos.CENTER);
-        windowLayout.setStyle("-fx-background-color: #29293d, linear-gradient(#29293d, #211C24)");
 
         Scene scene = new Scene(windowLayout);
+        scene.getStylesheets().add("Sudoku.css");
         window.setScene(scene);
         window.showAndWait();
 

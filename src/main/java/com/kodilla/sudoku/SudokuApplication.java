@@ -101,8 +101,8 @@ public class SudokuApplication extends Application {
             startNewGame(newGameGenerator.getUserPreference());
         });
         changeUserButton.setPrefWidth(BUTTON_WIDTH);
-        changeUserButton.setTextFill(Color.web("#b299e6"));
-        changeUserButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+        //changeUserButton.setTextFill(Color.web("#b299e6"));
+        //changeUserButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
         newBoardButton = new Button("New board");
         newBoardButton.setOnMouseClicked(e -> {
@@ -111,12 +111,12 @@ public class SudokuApplication extends Application {
             this.timer = new Timer(timerDisplay);
         });
         newBoardButton.setPrefWidth(BUTTON_WIDTH);
-        newBoardButton.setTextFill(Color.web("#b299e6"));
-        newBoardButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+        //newBoardButton.setTextFill(Color.web("#b299e6"));
+        //newBoardButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
 
         exitButton = new Button("Exit");
-        exitButton.setTextFill(Color.web("#b299e6"));
-        exitButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+        //exitButton.setTextFill(Color.web("#b299e6"));
+        //exitButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
         exitButton.setOnMouseClicked(e-> {
             System.exit(0);
         });
@@ -131,8 +131,8 @@ public class SudokuApplication extends Application {
 
         for (int i = 0; i<virtualKeys.length; i++) {
             virtualKeys[i] = new Button(String.valueOf(i));
-            virtualKeys[i].setTextFill(Color.web("#b299e6"));
-            virtualKeys[i].setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+            //virtualKeys[i].setTextFill(Color.web("#b299e6"));
+            //virtualKeys[i].setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
             virtualKeys[i].setPrefWidth(KEYBOARD_KEY_WIDTH);
             virtualKeys[i].setAlignment(Pos.CENTER);
             virtualKeys[i].setOnMouseClicked(e -> handleKeyClick(e));
@@ -157,12 +157,10 @@ public class SudokuApplication extends Application {
 
     private void initializeTopPanel() {
         playerDisplay = new Label();
-        playerDisplay.setTextFill(Color.web("#b299e6"));
-        playerDisplay.setStyle("-fx-background-color: #29293d; -fx-font-size: 20px");
+        playerDisplay.setStyle("-fx-font-size: 20px");
 
         timerDisplay = new Label();
-        timerDisplay.setTextFill(Color.web("#b299e6"));
-        timerDisplay.setStyle("-fx-background-color: #29293d; -fx-font-size: 20px");
+        timerDisplay.setStyle("-fx-font-size: 20px");
 
 
         topPanel = new VBox(playerDisplay, timerDisplay);
@@ -200,8 +198,8 @@ public class SudokuApplication extends Application {
         boardFieldsPane.add(inputField, fieldCoordinates.getColumn(), fieldCoordinates.getRow());
         inputField.setText("0");
         inputField.setAlignment(Pos.CENTER);
-        inputField.setTextFill(Color.web("#b299e6"));
-        inputField.setStyle("-fx-background-color: #29293d;");
+        //inputField.setTextFill(Color.web("#b299e6"));
+        //inputField.setStyle("-fx-background-color: #29293d;");
         inputField.setMinSize(FIELD_WIDTH, FIELD_WIDTH);
 
         inputField.setOnMouseClicked(e->handleFieldSelection(e));
@@ -386,10 +384,10 @@ public class SudokuApplication extends Application {
         windowMainGridPane.setCenter(boardFieldsPane);
         windowMainGridPane.setRight(rightPanel);
         windowMainGridPane.setTop(topPanel);
-        windowMainGridPane.setStyle("-fx-background-color: #29293d;");
+        //windowMainGridPane.setStyle("-fx-background-color: #29293d;");
 
         Scene scene = new Scene(windowMainGridPane, 300, 300);
-        scene.getStylesheets().add("com/kodilla/sudoku/Sudoku.css");
+        scene.getStylesheets().add("Sudoku.css");
 
         window.setTitle("Sudoku");
         window.setResizable(true);

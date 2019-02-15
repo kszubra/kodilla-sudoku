@@ -4,11 +4,9 @@ import com.kodilla.sudoku.backend.assets.Game;
 import com.kodilla.sudoku.backend.assets.InitialGameData;
 import com.kodilla.sudoku.backend.assets.SudokuBoard;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
+@Ignore
 public class GameTestSuite {
     private static int testNumber = 0;
 

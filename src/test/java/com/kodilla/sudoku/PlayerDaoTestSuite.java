@@ -5,10 +5,7 @@ import com.kodilla.sudoku.backend.password.hasher.PasswordHasher;
 import com.kodilla.sudoku.backend.password.hasher.Sha512Hasher;
 import com.kodilla.sudoku.backend.player.Player;
 import com.kodilla.sudoku.backend.player.PlayerDao;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +15,7 @@ import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Ignore
 public class PlayerDaoTestSuite {
     @Autowired
     PlayerDao playerDao;
