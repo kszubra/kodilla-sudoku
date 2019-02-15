@@ -11,6 +11,7 @@
 .button{
     -fx-background-color: #403F40, linear-gradient(#403F40, #331D45);
     -fx-text-fill: #b299e6;
+    -fx-text-alignment: center;
 }
 
 .choice-box .context-menu { /* background of the list */
