@@ -53,8 +53,8 @@ public class SudokuApplication extends Application {
     private final double FIELD_WIDTH = 40;
     private final double TOP_BAR_LABEL_HEIGHT = 30;
     private final double BOTTOM_BUTTON_HEIGHT = 20;
-    private final double WINDOW_HEIGHT = (9 * FIELD_WIDTH) + (2 * TOP_BAR_LABEL_HEIGHT) + BOTTOM_BUTTON_HEIGHT + 50;
-    private final double WINDOW_WIDTH = (9 * FIELD_WIDTH) + (3 * KEYBOARD_KEY_WIDTH) + (4 * KEYBOARD_SPACING);
+    public final double APPLICATION_WINDOW_HEIGHT = (9 * FIELD_WIDTH) + (2 * TOP_BAR_LABEL_HEIGHT) + BOTTOM_BUTTON_HEIGHT + 50;
+    public final double APPLICATION_WINDOW_WIDTH = (9 * FIELD_WIDTH) + (3 * KEYBOARD_KEY_WIDTH) + (4 * KEYBOARD_SPACING);
 
     private Timer timer = null;
 
@@ -389,13 +389,13 @@ public class SudokuApplication extends Application {
         windowMainGridPane.setRight(rightPanel);
         windowMainGridPane.setTop(topPanel);
 
-        Scene scene = new Scene(windowMainGridPane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        Scene scene = new Scene(windowMainGridPane, APPLICATION_WINDOW_WIDTH, APPLICATION_WINDOW_HEIGHT);
         scene.getStylesheets().add("Sudoku.css");
 
         window.setTitle("Sudoku");
         window.setResizable(true);
-        window.setWidth(WINDOW_WIDTH);
-        window.setHeight(WINDOW_HEIGHT);
+        window.setWidth(APPLICATION_WINDOW_WIDTH);
+        window.setHeight(APPLICATION_WINDOW_HEIGHT);
         window.initStyle(StageStyle.DECORATED);
         window.setScene(scene);
         window.show();

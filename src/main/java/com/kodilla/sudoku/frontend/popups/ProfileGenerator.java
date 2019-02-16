@@ -27,7 +27,13 @@ public class ProfileGenerator {
     @Autowired
     PlayerDao playerDao;
 
-    private final int ONE = 1;
+    private final int MINIMUM_TEXT_LENGTH = 1;
+    private final int MAXIMUM_TEXT_LENGTH = 20;
+    private final String INSTRUCTION = "Login and password need to contain " + MINIMUM_TEXT_LENGTH + " - " + MAXIMUM_TEXT_LENGTH + " characters";
+    private final String FAILED_LOGIN_MESSAGE = "Something went wrong! Possible reasons are: \r\n" +
+                                                    "- login is already taken \r\n" +
+                                                    "- login or password don't match required length \r\n" +
+                                                    "- password and its confirmation don't match";
     private boolean availableLogin = false;
 
 
@@ -39,12 +45,14 @@ public class ProfileGenerator {
         window.setWidth(400);
         window.setHeight(300);
 
+        Label instructionField = new Label();
+        instructionField.setText(INSTRUCTION);
+
         Label loginField = new Label();
         loginField.setText("Login:");
         loginField.setTextFill(Color.web("#b299e6"));
 
         TextField inputLogin = new TextField();
-        //inputLogin.setStyle("-fx-background-color: #9e8fbc");
         inputLogin.textProperty().addListener((obs, oldText, newText) -> {
 
             try {
@@ -54,7 +62,7 @@ public class ProfileGenerator {
                 availableLogin=true;
             }
 
-            if (availableLogin) {
+            if (availableLogin && hasProperLength(inputLogin)) {
                 inputLogin.setStyle("-fx-background-color: PaleGreen");
             } else {
                 inputLogin.setStyle("-fx-background-color: LightCoral");
@@ -68,6 +76,15 @@ public class ProfileGenerator {
         passwordField.setTextFill(Color.web("#b299e6"));
 
         PasswordField inputPassword = new PasswordField();
+        inputPassword.textProperty().addListener((obs, oldText, newText) -> {
+
+            if ( hasProperLength(inputPassword) ) {
+                inputPassword.setStyle("-fx-background-color: PaleGreen");
+            } else {
+                inputPassword.setStyle("-fx-background-color: LightCoral");
+            }
+
+        });
         inputPassword.setMaxWidth(window.getWidth() * 0.5);
 
         Label confirmPasswordField = new Label();
@@ -75,7 +92,6 @@ public class ProfileGenerator {
         confirmPasswordField.setTextFill(Color.web("#b299e6"));
 
         PasswordField inputConfirmPassword = new PasswordField();
-        //inputConfirmPassword.setStyle("-fx-background-color: #9e8fbc");
         inputConfirmPassword.textProperty().addListener((obs, oldText, newText) -> {
 
             if ( newText.equals(inputPassword.getText()) ) {
@@ -91,13 +107,12 @@ public class ProfileGenerator {
         confirmButton.setText("Create");
         confirmButton.setOnMouseClicked(e -> {
 
-            if (isNotBlank(inputLogin)
+            if (hasProperLength(inputLogin)
                     && availableLogin
-                    && isNotBlank(inputPassword)
-                    && isNotBlank(inputConfirmPassword)
+                    && hasProperLength(inputPassword)
+                    && hasProperLength(inputConfirmPassword)
                     && inputPassword.getText().equals(inputConfirmPassword.getText()) ) {
 
-                //TODO: create user in database and close window
                 System.out.println("Passwords match");
                 Player player = new Player();
                 player.setUsername(inputLogin.getText());
@@ -108,12 +123,12 @@ public class ProfileGenerator {
                 window.close();
 
             } else {
-                //TODO: things if passwords don't match etc
+                MessageBox.displayMessage("Registration failed", FAILED_LOGIN_MESSAGE);
             }
 
         });
 
-        VBox windowLayout = new VBox(loginField, inputLogin, passwordField, inputPassword, confirmPasswordField,
+        VBox windowLayout = new VBox(instructionField, loginField, inputLogin, passwordField, inputPassword, confirmPasswordField,
                 inputConfirmPassword, confirmButton);
         windowLayout.setSpacing(10);
         windowLayout.setPadding(new Insets(5, 5, 5, 5));
@@ -126,7 +141,7 @@ public class ProfileGenerator {
 
     }
 
-    private boolean isNotBlank(TextField inputTextField) {
-        return inputTextField.getText().length() >= ONE;
+    private boolean hasProperLength(TextField inputTextField) {
+        return (inputTextField.getText().length() >= MINIMUM_TEXT_LENGTH) && (inputTextField.getText().length() <= MAXIMUM_TEXT_LENGTH);
     }
 }

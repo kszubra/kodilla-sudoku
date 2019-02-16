@@ -19,10 +19,11 @@ public class MessageBox {
         window.initModality(Modality.APPLICATION_MODAL); //below windows can't be entered before dealing with this one
         window.setTitle(windowTitle);
         window.initStyle(StageStyle.UNDECORATED);
-        window.setWidth(300);
+        window.setWidth(350);
 
         Label messageLabel = new Label();
         messageLabel.setText(message);
+        messageLabel.setWrapText(true);
 
         Button closeButton = new Button();
         closeButton.setText("Ok");
