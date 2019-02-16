@@ -46,12 +46,14 @@ public class SudokuApplication extends Application {
     PlayerDao playerDao;
 
     private static final int BOARD_LINE_SIZE = 9;
-    private final double BUTTON_WIDTH = 150;
+    private final double BOTTOM_BUTTON_WIDTH = 100;
     private final double BOTTOM_BUTTONS_SPACING = 10;
     private final double KEYBOARD_SPACING = 5;
     private final double KEYBOARD_KEY_WIDTH = 50;
     private final double FIELD_WIDTH = 40;
-    private final double WINDOW_HEIGHT = 300;
+    private final double TOP_BAR_LABEL_HEIGHT = 30;
+    private final double BOTTOM_BUTTON_HEIGHT = 20;
+    private final double WINDOW_HEIGHT = (9 * FIELD_WIDTH) + (2 * TOP_BAR_LABEL_HEIGHT) + BOTTOM_BUTTON_HEIGHT + 50;
     private final double WINDOW_WIDTH = (9 * FIELD_WIDTH) + (3 * KEYBOARD_KEY_WIDTH) + (4 * KEYBOARD_SPACING);
 
     private Timer timer = null;
@@ -66,7 +68,7 @@ public class SudokuApplication extends Application {
     private GridPane boardFieldsPane = new GridPane();
     private GridPane virtualKeyboardPane = new GridPane();
 
-    private Button solveButton, newBoardButton, changeUserButton, exitButton;
+    private Button solveButton, newBoardButton, changeUserButton, exitButton, rankingButton;
     private Button[] virtualKeys = new Button[10];
 
     private VBox rightPanel, topPanel;
@@ -91,18 +93,16 @@ public class SudokuApplication extends Application {
             handleEndGame(false);
             solveBoard();
         });
-        solveButton.setPrefWidth(BUTTON_WIDTH);
-        //solveButton.setTextFill(Color.web("#b299e6"));
-        //solveButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+        solveButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
+        solveButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
 
         changeUserButton = new Button("Switch user");
         changeUserButton.setOnMouseClicked(e -> {
             handleEndGame(false);
             startNewGame(newGameGenerator.getUserPreference());
         });
-        changeUserButton.setPrefWidth(BUTTON_WIDTH);
-        //changeUserButton.setTextFill(Color.web("#b299e6"));
-        //changeUserButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+        changeUserButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
+        changeUserButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
 
         newBoardButton = new Button("New board");
         newBoardButton.setOnMouseClicked(e -> {
@@ -110,29 +110,33 @@ public class SudokuApplication extends Application {
             setNewBoard();
             this.timer = new Timer(timerDisplay);
         });
-        newBoardButton.setPrefWidth(BUTTON_WIDTH);
-        //newBoardButton.setTextFill(Color.web("#b299e6"));
-        //newBoardButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
+        newBoardButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
+        newBoardButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
 
         exitButton = new Button("Exit");
-        //exitButton.setTextFill(Color.web("#b299e6"));
-        //exitButton.setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
         exitButton.setOnMouseClicked(e-> {
             System.exit(0);
         });
-        exitButton.setPrefWidth(BUTTON_WIDTH);
+        exitButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
+        exitButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
 
-        bottomPanel = new HBox(solveButton, newBoardButton, changeUserButton, exitButton);
+        rankingButton = new Button("Ranking");
+        rankingButton.setOnMouseClicked(e-> {
+            //TODO: display ranking in pop-up window
+        });
+        rankingButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
+        rankingButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
+
+        bottomPanel = new HBox(solveButton, newBoardButton, changeUserButton, rankingButton, exitButton);
         bottomPanel.setAlignment(Pos.CENTER);
         bottomPanel.setSpacing(BOTTOM_BUTTONS_SPACING);
+        bottomPanel.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
     }
 
     private void initializeVirtualKeys() {
 
         for (int i = 0; i<virtualKeys.length; i++) {
             virtualKeys[i] = new Button(String.valueOf(i));
-            //virtualKeys[i].setTextFill(Color.web("#b299e6"));
-            //virtualKeys[i].setStyle("-fx-background-color: #403F40, linear-gradient(#403F40, #331D45)");
             virtualKeys[i].setPrefWidth(KEYBOARD_KEY_WIDTH);
             virtualKeys[i].setAlignment(Pos.CENTER);
             virtualKeys[i].setOnMouseClicked(e -> handleKeyClick(e));
@@ -158,9 +162,11 @@ public class SudokuApplication extends Application {
     private void initializeTopPanel() {
         playerDisplay = new Label();
         playerDisplay.setStyle("-fx-font-size: 20px");
+        playerDisplay.setPrefHeight(TOP_BAR_LABEL_HEIGHT);
 
         timerDisplay = new Label();
         timerDisplay.setStyle("-fx-font-size: 20px");
+        timerDisplay.setPrefHeight(TOP_BAR_LABEL_HEIGHT);
 
 
         topPanel = new VBox(playerDisplay, timerDisplay);
@@ -198,8 +204,6 @@ public class SudokuApplication extends Application {
         boardFieldsPane.add(inputField, fieldCoordinates.getColumn(), fieldCoordinates.getRow());
         inputField.setText("0");
         inputField.setAlignment(Pos.CENTER);
-        //inputField.setTextFill(Color.web("#b299e6"));
-        //inputField.setStyle("-fx-background-color: #29293d;");
         inputField.setMinSize(FIELD_WIDTH, FIELD_WIDTH);
 
         inputField.setOnMouseClicked(e->handleFieldSelection(e));
@@ -384,15 +388,14 @@ public class SudokuApplication extends Application {
         windowMainGridPane.setCenter(boardFieldsPane);
         windowMainGridPane.setRight(rightPanel);
         windowMainGridPane.setTop(topPanel);
-        //windowMainGridPane.setStyle("-fx-background-color: #29293d;");
 
-        Scene scene = new Scene(windowMainGridPane, 300, 300);
+        Scene scene = new Scene(windowMainGridPane, WINDOW_WIDTH, WINDOW_HEIGHT);
         scene.getStylesheets().add("Sudoku.css");
 
         window.setTitle("Sudoku");
         window.setResizable(true);
-        window.setHeight(400);
-        window.setMinWidth(WINDOW_WIDTH);
+        window.setWidth(WINDOW_WIDTH);
+        window.setHeight(WINDOW_HEIGHT);
         window.initStyle(StageStyle.DECORATED);
         window.setScene(scene);
         window.show();
