@@ -34,6 +34,10 @@ public class Score {
     private LocalDate achieveDate;
 
     @NotNull
+    @Column
+    private String difficultyLevel;
+
+    @NotNull
     @Column(name="DURATION")
     private long duration;
 

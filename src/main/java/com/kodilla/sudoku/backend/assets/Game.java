@@ -12,11 +12,12 @@ public class Game {
     private SudokuBoard gameBoard = new SudokuBoard();
     private DifficultyLevel difficultyLevel;
     private String playerName;
-    private Score gameScore = new Score();
+    private Score gameScore;
     private boolean isComplete;
     private boolean isSaved;
 
     public Game(InitialGameData initialData) {
+        this.gameScore = new Score();
         this.isComplete = false;
         this.gameBoard.preFill(initialData.getDifficultyLevel());
         this.difficultyLevel = initialData.getDifficultyLevel();

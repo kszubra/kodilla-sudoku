@@ -307,10 +307,12 @@ public class SudokuApplication extends Application {
     private void handleEndGame(boolean playerSolved) {
         Long gameTime = timer.stop();
         String playerName = currentGame.getPlayerName();
+        String difficulty = currentGame.getDifficultyLevel().toString();
 
         if (!currentGame.isSaved()) {
             Player playerToSave = playerDao.getPlayerByUsername(playerName).orElseThrow(() -> new PlayerNotFoundException("Player was not found"));
             Score scoreToSave = new Score();
+            scoreToSave.setDifficultyLevel(difficulty);
             scoreToSave.setPlayer(playerToSave);
             scoreToSave.setDuration(gameTime);
             scoreToSave.setCompleted(playerSolved);
