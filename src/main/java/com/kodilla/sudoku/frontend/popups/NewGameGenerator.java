@@ -69,13 +69,14 @@ public class NewGameGenerator {
         confirmButton.setOnMouseClicked(e -> {
 
             if (isNotBlank(inputLogin) && isNotBlank(inputPassword)) {
-                if(validateLogin()) {
-                    initialGameData = new InitialGameData(inputLogin.getText(), difficultyLevelChoiceBox.getValue());
-                    window.close();
-                } else {
-                    MessageBox.displayMessage("Login Failed", "Given login does not exist or password is not correct");
+                try {
+                    if(validateLogin()) {
+                        initialGameData = new InitialGameData(inputLogin.getText(), difficultyLevelChoiceBox.getValue());
+                        window.close();
+                    }
+                } catch (PlayerNotFoundException exception) {
+                    MessageBox.displayMessage("Login failed", exception.getMessage());
                 }
-
             }
 
         });
@@ -113,6 +114,7 @@ public class NewGameGenerator {
             playerDao.updateLastLoginById(id);
             return true;
         } else {
+            MessageBox.displayMessage("Login failed", "Login and password do not match");
             return false;
         }
 
