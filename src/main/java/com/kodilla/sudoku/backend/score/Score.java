@@ -45,4 +45,7 @@ public class Score {
     @Column(name="COMPLETED")
     private boolean isCompleted;
 
+    public String toString() {
+        return duration + " finished: " + isCompleted;
+    }
 }

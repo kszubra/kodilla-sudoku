@@ -10,10 +10,7 @@ import com.kodilla.sudoku.backend.player.Player;
 import com.kodilla.sudoku.backend.player.PlayerDao;
 import com.kodilla.sudoku.backend.score.Score;
 import com.kodilla.sudoku.backend.score.ScoreDao;
-import com.kodilla.sudoku.frontend.popups.ProfileGenerator;
-import com.kodilla.sudoku.frontend.popups.LoginOrRegisterBox;
-import com.kodilla.sudoku.frontend.popups.MessageBox;
-import com.kodilla.sudoku.frontend.popups.NewGameGenerator;
+import com.kodilla.sudoku.frontend.popups.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -40,6 +37,8 @@ public class SudokuApplication extends Application {
     ProfileGenerator profileGenerator;
     @Autowired
     NewGameGenerator newGameGenerator;
+    @Autowired
+    RankingGenerator rankingGenerator;
     @Autowired
     ScoreDao scoreDao;
     @Autowired
@@ -122,7 +121,7 @@ public class SudokuApplication extends Application {
 
         rankingButton = new Button("Ranking");
         rankingButton.setOnMouseClicked(e-> {
-            //TODO: display ranking in pop-up window
+            rankingGenerator.displayRanking(currentGame.getPlayerName());
         });
         rankingButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
         rankingButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
@@ -369,6 +368,7 @@ public class SudokuApplication extends Application {
     public void start(Stage window) {
         ProfileGenerator profileGenerator = context.getBean(ProfileGenerator.class);
         NewGameGenerator newGameGenerator = context.getBean(NewGameGenerator.class);
+        rankingGenerator = context.getBean(RankingGenerator.class);
         playerDao = context.getBean(PlayerDao.class);
         scoreDao = context.getBean(ScoreDao.class);
 
