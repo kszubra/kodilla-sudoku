@@ -10,6 +10,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name="Score.getBestEasyScoreOf",
+                query="SELECT MIN(duration) FROM scores WHERE player_id= CONCAT(:PLAYER_ID, ' and difficulty_level=\"easy\"')"
+        )
+})
+
 @Entity
 @Table(name = "SCORES")
 @NoArgsConstructor

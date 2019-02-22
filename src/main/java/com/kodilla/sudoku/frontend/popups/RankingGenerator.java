@@ -142,9 +142,9 @@ public class RankingGenerator {
         }
         hardRanking.setText(hardScoreBuilder.toString());
 
-        playerBestEasyScore.setText("Player's best score");
-        playerBestMediumScore.setText("Player's best score");
-        playerBestHardScore.setText("Player's best score");
+        playerBestEasyScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + scoreDao.getBestEasyScoreOf(currentPlayer.getUserID()));
+        playerBestMediumScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + "sth");
+        playerBestHardScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + "sth");
 
     }
 
