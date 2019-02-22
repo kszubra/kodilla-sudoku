@@ -88,9 +88,13 @@ public class RankingGenerator {
                 .filter(e -> e.getDifficultyLevel().equals("hard"))
                 .collect(Collectors.toList());
 
-        for (Score score : easyScores) {
+        for(Score score : hardScores) {
             System.out.println(score.toString());
         }
+
+        System.out.println("easy score size: " + easyScores.size());
+        System.out.println("medium score size: " + mediumScores.size());
+        System.out.println("hard score size: " + hardScores.size());
     }
 
     public void displayRanking(String playerUsername) {

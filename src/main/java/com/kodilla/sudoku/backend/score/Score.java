@@ -46,6 +46,6 @@ public class Score {
     private boolean isCompleted;
 
     public String toString() {
-        return duration + " finished: " + isCompleted;
+        return "player id: " + player.getUserID() + " time: " + duration + " finished: " + isCompleted;
     }
 }

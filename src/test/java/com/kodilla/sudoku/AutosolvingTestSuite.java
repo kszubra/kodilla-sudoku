@@ -5,7 +5,6 @@ import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import org.junit.*;
 
-@Ignore
 public class AutosolvingTestSuite {
     private SudokuBoard testBoard;
     private static int testNumber = 0;

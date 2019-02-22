@@ -5,7 +5,6 @@ import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.generator.BoardGenerator;
 import org.junit.*;
 
-@Ignore
 public class BoardGeneratorTestSuite {
     private static int testNumber = 0;
 

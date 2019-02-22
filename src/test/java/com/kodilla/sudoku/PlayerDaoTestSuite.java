@@ -19,6 +19,7 @@ import java.time.LocalDate;
 public class PlayerDaoTestSuite {
     @Autowired
     PlayerDao playerDao;
+
     private static int testNumber;
 
 
