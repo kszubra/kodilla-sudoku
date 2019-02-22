@@ -32,9 +32,11 @@ public class RankingGenerator {
 
     private final double WINDOW_WIDTH = 450;
     private final double WINDOW_HEIGHT = 400;
-    private final double COLUMN_WIDTH = WINDOW_WIDTH/3;
-    private final double LABEL_BUTTON_HEIGHT = WINDOW_HEIGHT*0.15;
-    private final double RANKING_HEIGHT = WINDOW_HEIGHT*0.75;
+    private final double BETWEEN_COLUMNS_SPACING = 5;
+    private final double IN_COLUMN_SPACING = 5;
+    private final double COLUMN_WIDTH = (WINDOW_WIDTH - 2*BETWEEN_COLUMNS_SPACING)/3;
+    private final double LABEL_BUTTON_HEIGHT = (WINDOW_HEIGHT - 3*IN_COLUMN_SPACING)*0.075;
+    private final double RANKING_HEIGHT = (WINDOW_HEIGHT - 3*IN_COLUMN_SPACING)*0.60;
     private Label easyModeLabel, mediumModeLabel, hardModeLabel, playerBestEasyScore, playerBestMediumScore, playerBestHardScore, easyRanking, mediumRanking, hardRanking;
     private Button closeButton;
     private VBox easyColumn, mediumcolumn, hardColumn;
@@ -60,18 +62,21 @@ public class RankingGenerator {
         hardModeLabel.setPrefHeight(LABEL_BUTTON_HEIGHT);
 
         easyRanking = new Label();
-        easyRanking.prefWidth(COLUMN_WIDTH);
-        easyRanking.setTextAlignment(TextAlignment.LEFT);
+        easyRanking.setMinWidth(COLUMN_WIDTH);
+        easyRanking.setTextAlignment(TextAlignment.JUSTIFY);
+        easyRanking.setAlignment(Pos.TOP_LEFT);
         easyRanking.setPrefHeight(RANKING_HEIGHT);
 
         mediumRanking = new Label();
-        mediumRanking.prefWidth(COLUMN_WIDTH);
-        mediumRanking.setTextAlignment(TextAlignment.LEFT);
+        mediumRanking.setMinWidth(COLUMN_WIDTH);
+        mediumRanking.setTextAlignment(TextAlignment.JUSTIFY);
+        mediumRanking.setAlignment(Pos.TOP_LEFT);
         mediumRanking.setPrefHeight(RANKING_HEIGHT);
 
         hardRanking = new Label();
-        hardRanking.prefWidth(COLUMN_WIDTH);
-        hardRanking.setTextAlignment(TextAlignment.LEFT);
+        hardRanking.setMinWidth(COLUMN_WIDTH);
+        hardRanking.setTextAlignment(TextAlignment.JUSTIFY);
+        hardRanking.setAlignment(Pos.TOP_LEFT);
         hardRanking.setPrefHeight(RANKING_HEIGHT);
 
         playerBestEasyScore = new Label();
@@ -92,10 +97,14 @@ public class RankingGenerator {
         closeButton.setOnMouseClicked(e -> window.close());
 
         easyColumn = new VBox(easyModeLabel, easyRanking, playerBestEasyScore);
+        easyColumn.setSpacing(IN_COLUMN_SPACING);
         mediumcolumn = new VBox(mediumModeLabel, mediumRanking, playerBestMediumScore);
+        mediumcolumn.setSpacing(IN_COLUMN_SPACING);
         hardColumn = new VBox(hardModeLabel, hardRanking, playerBestHardScore, closeButton);
+        hardColumn.setSpacing(IN_COLUMN_SPACING);
 
         windowLayout = new HBox(easyColumn, mediumcolumn, hardColumn);
+        windowLayout.setSpacing(BETWEEN_COLUMNS_SPACING);
 
     }
 
