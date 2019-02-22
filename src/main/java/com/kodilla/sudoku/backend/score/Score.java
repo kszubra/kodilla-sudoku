@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Score {
+public class Score implements Comparable {
 
     @Id
     @GeneratedValue
@@ -47,5 +47,13 @@ public class Score {
 
     public String toString() {
         return "player id: " + player.getUserID() + " time: " + duration + " finished: " + isCompleted;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Score a = (Score)o;
+        if (this.duration < a.getDuration()) {return -1;}
+        if (this.duration > a.getDuration()) {return 1;}
+        else return 0;
     }
 }

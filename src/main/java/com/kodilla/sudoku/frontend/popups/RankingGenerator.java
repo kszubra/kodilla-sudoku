@@ -1,5 +1,7 @@
 package com.kodilla.sudoku.frontend.popups;
 
+import com.kodilla.sudoku.backend.exceptions.PlayerNotFoundException;
+import com.kodilla.sudoku.backend.player.Player;
 import com.kodilla.sudoku.backend.player.PlayerDao;
 import com.kodilla.sudoku.backend.score.Score;
 import com.kodilla.sudoku.backend.score.ScoreDao;
@@ -10,11 +12,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +40,8 @@ public class RankingGenerator {
     private HBox difficultyLabels, rankings, playerScores, buttons;
     private VBox windowLayout;
     private Stage window;
+    private HashMap<Integer, String> idAndUsernameMap;
+    private Player currentPlayer;
 
     private void initializeWindowLayout() {
         easyModeLabel = new Label("EASY");
@@ -51,10 +58,16 @@ public class RankingGenerator {
 
         easyRanking = new Text();
         easyRanking.prefWidth(COLUMN_WIDTH);
+        easyRanking.setTextAlignment(TextAlignment.LEFT);
+
         mediumRanking = new Text();
         mediumRanking.prefWidth(COLUMN_WIDTH);
+        mediumRanking.setTextAlignment(TextAlignment.LEFT);
+
+
         hardRanking = new Text();
         hardRanking.prefWidth(COLUMN_WIDTH);
+        hardRanking.setTextAlignment(TextAlignment.LEFT);
 
         rankings = new HBox(easyRanking, mediumRanking, hardRanking);
 
@@ -78,23 +91,52 @@ public class RankingGenerator {
     }
 
     private void prepareScores(String username) {
+        idAndUsernameMap = new HashMap<>();
+        List<Player> allPlayers = playerDao.findAll();
+        currentPlayer = playerDao.getPlayerByUsername(username).orElseThrow(() -> new PlayerNotFoundException("Given player does not exist"));
+
+        for(Player player : allPlayers) {
+            idAndUsernameMap.put(player.getUserID(), player.getUsername());
+        }
+
         List<Score> easyScores = scoreDao.findAll().stream()
                 .filter(e -> e.getDifficultyLevel().equals("easy"))
                 .collect(Collectors.toList());
+        easyScores.sort(Comparator.comparing(Score::getDuration));
+
         List<Score> mediumScores = scoreDao.findAll().stream()
                 .filter(e -> e.getDifficultyLevel().equals("medium"))
                 .collect(Collectors.toList());
+        mediumScores.sort(Comparator.comparing(Score::getDuration));
+
         List<Score> hardScores = scoreDao.findAll().stream()
                 .filter(e -> e.getDifficultyLevel().equals("hard"))
                 .collect(Collectors.toList());
+        hardScores.sort(Comparator.comparing(Score::getDuration));
+
+        StringBuilder easyScoreBuilder = new StringBuilder();
+        StringBuilder mediumScoreBuilder = new StringBuilder();
+        StringBuilder hardScoreBuilder = new StringBuilder();
+
+        for(Score score : easyScores) {
+            easyScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " finished: " + score.isCompleted() + "\r\n" );
+        }
+        easyRanking.setText(easyScoreBuilder.toString());
+
+        for(Score score : mediumScores) {
+            mediumScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " finished: " + score.isCompleted() + "\r\n" );
+        }
+        mediumRanking.setText(mediumScoreBuilder.toString());
 
         for(Score score : hardScores) {
-            System.out.println(score.toString());
+            hardScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " finished: " + score.isCompleted() + "\r\n" );
         }
+        hardRanking.setText(hardScoreBuilder.toString());
 
-        System.out.println("easy score size: " + easyScores.size());
-        System.out.println("medium score size: " + mediumScores.size());
-        System.out.println("hard score size: " + hardScores.size());
+        playerBestEasyScore.setText("Player's best score");
+        playerBestMediumScore.setText("Player's best score");
+        playerBestHardScore.setText("Player's best score");
+
     }
 
     public void displayRanking(String playerUsername) {

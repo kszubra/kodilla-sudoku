@@ -7,11 +7,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
 @Repository
 public interface PlayerDao extends CrudRepository<Player, Integer> {
+
+    @Override
+    List<Player> findAll();
 
     @Query
     Optional<Player> getPlayerByUsername(@Param("USERNAME") String username);
