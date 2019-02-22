@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -34,11 +33,12 @@ public class RankingGenerator {
     private final double WINDOW_WIDTH = 450;
     private final double WINDOW_HEIGHT = 400;
     private final double COLUMN_WIDTH = WINDOW_WIDTH/3;
-    private Label easyModeLabel, mediumModeLabel, hardModeLabel, playerBestEasyScore, playerBestMediumScore, playerBestHardScore;
-    private Text easyRanking, mediumRanking, hardRanking;
+    private final double LABEL_BUTTON_HEIGHT = WINDOW_HEIGHT*0.15;
+    private final double RANKING_HEIGHT = WINDOW_HEIGHT*0.75;
+    private Label easyModeLabel, mediumModeLabel, hardModeLabel, playerBestEasyScore, playerBestMediumScore, playerBestHardScore, easyRanking, mediumRanking, hardRanking;
     private Button closeButton;
-    private HBox difficultyLabels, rankings, playerScores, buttons;
-    private VBox windowLayout;
+    private VBox easyColumn, mediumcolumn, hardColumn;
+    private HBox windowLayout;
     private Stage window;
     private HashMap<Integer, String> idAndUsernameMap;
     private Player currentPlayer;
@@ -47,46 +47,55 @@ public class RankingGenerator {
         easyModeLabel = new Label("EASY");
         easyModeLabel.setPrefWidth(COLUMN_WIDTH);
         easyModeLabel.setAlignment(Pos.CENTER);
+        easyModeLabel.setPrefHeight(LABEL_BUTTON_HEIGHT);
+
         mediumModeLabel = new Label("MEDIUM");
         mediumModeLabel.setPrefWidth(COLUMN_WIDTH);
         mediumModeLabel.setAlignment(Pos.CENTER);
+        mediumModeLabel.setPrefHeight(LABEL_BUTTON_HEIGHT);
+
         hardModeLabel = new Label("HARD");
         hardModeLabel.setPrefWidth(COLUMN_WIDTH);
         hardModeLabel.setAlignment(Pos.CENTER);
+        hardModeLabel.setPrefHeight(LABEL_BUTTON_HEIGHT);
 
-        difficultyLabels = new HBox(easyModeLabel, mediumModeLabel, hardModeLabel);
-
-        easyRanking = new Text();
+        easyRanking = new Label();
         easyRanking.prefWidth(COLUMN_WIDTH);
         easyRanking.setTextAlignment(TextAlignment.LEFT);
+        easyRanking.setPrefHeight(RANKING_HEIGHT);
 
-        mediumRanking = new Text();
+        mediumRanking = new Label();
         mediumRanking.prefWidth(COLUMN_WIDTH);
         mediumRanking.setTextAlignment(TextAlignment.LEFT);
+        mediumRanking.setPrefHeight(RANKING_HEIGHT);
 
-
-        hardRanking = new Text();
+        hardRanking = new Label();
         hardRanking.prefWidth(COLUMN_WIDTH);
         hardRanking.setTextAlignment(TextAlignment.LEFT);
-
-        rankings = new HBox(easyRanking, mediumRanking, hardRanking);
+        hardRanking.setPrefHeight(RANKING_HEIGHT);
 
         playerBestEasyScore = new Label();
         playerBestEasyScore.setPrefWidth(COLUMN_WIDTH);
+        playerBestEasyScore.setPrefHeight(LABEL_BUTTON_HEIGHT);
+
         playerBestMediumScore = new Label();
         playerBestMediumScore.setPrefWidth(COLUMN_WIDTH);
+        playerBestMediumScore.setPrefHeight(LABEL_BUTTON_HEIGHT);
+
         playerBestHardScore = new Label();
         playerBestHardScore.setPrefWidth(COLUMN_WIDTH);
-
-        playerScores = new HBox(playerBestEasyScore, playerBestMediumScore, playerBestHardScore);
+        playerBestHardScore.setPrefHeight(LABEL_BUTTON_HEIGHT);
 
         closeButton = new Button("Close");
         closeButton.setPrefWidth(COLUMN_WIDTH);
+        closeButton.setPrefHeight(LABEL_BUTTON_HEIGHT);
         closeButton.setOnMouseClicked(e -> window.close());
 
-        buttons = new HBox(closeButton);
+        easyColumn = new VBox(easyModeLabel, easyRanking, playerBestEasyScore);
+        mediumcolumn = new VBox(mediumModeLabel, mediumRanking, playerBestMediumScore);
+        hardColumn = new VBox(hardModeLabel, hardRanking, playerBestHardScore, closeButton);
 
-        windowLayout = new VBox(difficultyLabels, rankings, playerScores, buttons);
+        windowLayout = new HBox(easyColumn, mediumcolumn, hardColumn);
 
     }
 
@@ -119,17 +128,17 @@ public class RankingGenerator {
         StringBuilder hardScoreBuilder = new StringBuilder();
 
         for(Score score : easyScores) {
-            easyScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " finished: " + score.isCompleted() + "\r\n" );
+            easyScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
         }
         easyRanking.setText(easyScoreBuilder.toString());
 
         for(Score score : mediumScores) {
-            mediumScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " finished: " + score.isCompleted() + "\r\n" );
+            mediumScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
         }
         mediumRanking.setText(mediumScoreBuilder.toString());
 
         for(Score score : hardScores) {
-            hardScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " finished: " + score.isCompleted() + "\r\n" );
+            hardScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
         }
         hardRanking.setText(hardScoreBuilder.toString());
 

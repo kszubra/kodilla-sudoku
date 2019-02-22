@@ -40,3 +40,7 @@
 .password-field {
     -fx-background-color: #9e8fbc;
 }
+.ranking-text {
+    -fx-text-fill: #b299e6;
+    -fx-fill: #b299e6;
+}
