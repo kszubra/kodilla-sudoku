@@ -13,5 +13,7 @@ public interface ScoreDao extends CrudRepository<Score, Integer> {
     @Override
     List<Score> findAll();
 
-    Long getBestEasyScoreOf(@Param("PLAYER_ID") int id);
+    Long getBestEasyScoreTimeOf(@Param("PLAYER_ID") int id);
+    Long getBestMediumScoreTimeOf(@Param("PLAYER_ID") int id);
+    Long getBestHardScoreTimeOf(@Param("PLAYER_ID") int id);
 }
