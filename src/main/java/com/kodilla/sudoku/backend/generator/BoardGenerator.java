@@ -36,6 +36,7 @@ public class BoardGenerator {
 
     public int[][] getSolvableBoard(int fieldsToZerofy) {
         makeSolvableBoard();
+        displayBoard();
         setSomeFieldsToZero(fieldsToZerofy);
         return board;
     }
