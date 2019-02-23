@@ -25,7 +25,7 @@ import java.util.List;
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name="Player.updateLastLoginById",
-                query="UPDATE PLAYERS SET LAST_LOGIN = curdate() WHERE id= CONCAT(:PLAYER_ID, '; commit;')"
+                query="UPDATE players SET LAST_LOGIN = curdate() WHERE id= CONCAT(:PLAYER_ID, '; commit;')"
         )
 
 })
