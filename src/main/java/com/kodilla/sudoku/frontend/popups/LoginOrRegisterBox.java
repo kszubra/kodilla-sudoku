@@ -11,6 +11,8 @@ import javafx.stage.StageStyle;
 
 public class LoginOrRegisterBox {
     private static boolean isLogin;
+    private static final double WINDOW_HEIGHT = 100;
+    private static final double WINDOW_WIDTH = 200;
 
     public static boolean getDecision(){
 
@@ -42,8 +44,10 @@ public class LoginOrRegisterBox {
         Scene scene = new Scene(windowLayout);
         scene.getStylesheets().add("Sudoku.css");
         window.setScene(scene);
-        window.setHeight(100);
-        window.setWidth(200);
+        window.setMinHeight(WINDOW_HEIGHT);
+        window.setHeight(WINDOW_HEIGHT);
+        window.setMinWidth(WINDOW_WIDTH);
+        window.setWidth(WINDOW_WIDTH);
         window.showAndWait();
 
         return isLogin;

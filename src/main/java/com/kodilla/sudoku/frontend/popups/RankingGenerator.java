@@ -30,8 +30,8 @@ public class RankingGenerator {
     @Autowired
     ScoreDao scoreDao;
 
-    private final double WINDOW_WIDTH = 450;
-    private final double WINDOW_HEIGHT = 400;
+    private final double WINDOW_WIDTH = 460;
+    private final double WINDOW_HEIGHT = 320;
     private final double BETWEEN_COLUMNS_SPACING = 5;
     private final double IN_COLUMN_SPACING = 5;
     private final double COLUMN_WIDTH = (WINDOW_WIDTH - 2*BETWEEN_COLUMNS_SPACING)/3;
@@ -163,7 +163,9 @@ public class RankingGenerator {
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Ranking");
         window.setWidth(WINDOW_WIDTH);
+        window.setMinWidth(WINDOW_WIDTH);
         window.setHeight(WINDOW_HEIGHT);
+        window.setMinHeight(WINDOW_HEIGHT);
 
         initializeWindowLayout();
         prepareScores(playerUsername);

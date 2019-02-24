@@ -24,6 +24,8 @@ public class NewGameGenerator {
     private PlayerDao playerDao;
 
     private final int ONE = 1;
+    private final double WINDOW_HEIGHT = 300;
+    private final double WINDOW_WIDTH = 400;
     private InitialGameData initialGameData;
     private final String EXPLANATION = "Difficulty levels differs in number of pre-filled fields. \r\n" +
                                                 "EASY: 30 filled fields \r\n" +
@@ -89,6 +91,10 @@ public class NewGameGenerator {
 
         Scene scene = new Scene(windowLayout);
         scene.getStylesheets().add("Sudoku.css");
+        window.setHeight(WINDOW_HEIGHT);
+        window.setMinHeight(WINDOW_HEIGHT);
+        window.setWidth(WINDOW_WIDTH);
+        window.setMinWidth(WINDOW_WIDTH);
         window.setScene(scene);
         window.showAndWait();
 

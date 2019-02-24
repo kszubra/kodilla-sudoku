@@ -53,7 +53,7 @@ public class SudokuApplication extends Application {
     private final double TOP_BAR_LABEL_HEIGHT = 30;
     private final double BOTTOM_BUTTON_HEIGHT = 20;
     public final double APPLICATION_WINDOW_HEIGHT = (9 * FIELD_WIDTH) + (2 * TOP_BAR_LABEL_HEIGHT) + BOTTOM_BUTTON_HEIGHT + 50;
-    public final double APPLICATION_WINDOW_WIDTH = (9 * FIELD_WIDTH) + (3 * KEYBOARD_KEY_WIDTH) + (4 * KEYBOARD_SPACING);
+    public final double APPLICATION_WINDOW_WIDTH = (9 * FIELD_WIDTH) + (3 * KEYBOARD_KEY_WIDTH) + (4 * KEYBOARD_SPACING) +25;
 
     private Timer timer = null;
 
@@ -92,16 +92,16 @@ public class SudokuApplication extends Application {
             handleEndGame(false);
             solveBoard();
         });
-        solveButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
-        solveButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
+        solveButton.setMinWidth(BOTTOM_BUTTON_WIDTH);
+        solveButton.setMinHeight(BOTTOM_BUTTON_HEIGHT);
 
         changeUserButton = new Button("Switch user");
         changeUserButton.setOnMouseClicked(e -> {
             handleEndGame(false);
             startNewGame(newGameGenerator.getUserPreference());
         });
-        changeUserButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
-        changeUserButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
+        changeUserButton.setMinWidth(BOTTOM_BUTTON_WIDTH);
+        changeUserButton.setMinHeight(BOTTOM_BUTTON_HEIGHT);
 
         newBoardButton = new Button("New board");
         newBoardButton.setOnMouseClicked(e -> {
@@ -109,34 +109,34 @@ public class SudokuApplication extends Application {
             setNewBoard();
             this.timer = new Timer(timerDisplay);
         });
-        newBoardButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
-        newBoardButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
+        newBoardButton.setMinWidth(BOTTOM_BUTTON_WIDTH);
+        newBoardButton.setMinHeight(BOTTOM_BUTTON_HEIGHT);
 
         exitButton = new Button("Exit");
         exitButton.setOnMouseClicked(e-> {
             System.exit(0);
         });
-        exitButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
-        exitButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
+        exitButton.setMinWidth(BOTTOM_BUTTON_WIDTH);
+        exitButton.setMinHeight(BOTTOM_BUTTON_HEIGHT);
 
         rankingButton = new Button("Ranking");
         rankingButton.setOnMouseClicked(e-> {
             rankingGenerator.displayRanking(currentGame.getPlayerName());
         });
-        rankingButton.setPrefWidth(BOTTOM_BUTTON_WIDTH);
-        rankingButton.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
+        rankingButton.setMinWidth(BOTTOM_BUTTON_WIDTH);
+        rankingButton.setMinHeight(BOTTOM_BUTTON_HEIGHT);
 
         bottomPanel = new HBox(solveButton, newBoardButton, changeUserButton, rankingButton, exitButton);
         bottomPanel.setAlignment(Pos.CENTER);
         bottomPanel.setSpacing(BOTTOM_BUTTONS_SPACING);
-        bottomPanel.setPrefHeight(BOTTOM_BUTTON_HEIGHT);
+        bottomPanel.setMinHeight(BOTTOM_BUTTON_HEIGHT);
     }
 
     private void initializeVirtualKeys() {
 
         for (int i = 0; i<virtualKeys.length; i++) {
             virtualKeys[i] = new Button(String.valueOf(i));
-            virtualKeys[i].setPrefWidth(KEYBOARD_KEY_WIDTH);
+            virtualKeys[i].setMinWidth(KEYBOARD_KEY_WIDTH);
             virtualKeys[i].setAlignment(Pos.CENTER);
             virtualKeys[i].setOnMouseClicked(e -> handleKeyClick(e));
 
@@ -396,7 +396,9 @@ public class SudokuApplication extends Application {
 
         window.setTitle("Sudoku");
         window.setResizable(true);
+        window.setMinWidth(APPLICATION_WINDOW_WIDTH);
         window.setWidth(APPLICATION_WINDOW_WIDTH);
+        window.setMinHeight(APPLICATION_WINDOW_HEIGHT);
         window.setHeight(APPLICATION_WINDOW_HEIGHT);
         window.initStyle(StageStyle.DECORATED);
         window.setScene(scene);

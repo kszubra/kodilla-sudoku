@@ -29,6 +29,8 @@ public class ProfileGenerator {
 
     private final int MINIMUM_TEXT_LENGTH = 1;
     private final int MAXIMUM_TEXT_LENGTH = 20;
+    private final double WINDOW_HEIGHT = 300;
+    private final double WINDOW_WIDTH = 400;
     private final String INSTRUCTION = "Login and password need to contain " + MINIMUM_TEXT_LENGTH + " - " + MAXIMUM_TEXT_LENGTH + " characters";
     private final String FAILED_LOGIN_MESSAGE = "Something went wrong! Possible reasons are: \r\n" +
                                                     "- login is already taken \r\n" +
@@ -136,6 +138,10 @@ public class ProfileGenerator {
 
         Scene scene = new Scene(windowLayout);
         scene.getStylesheets().add("Sudoku.css");
+        window.setHeight(WINDOW_HEIGHT);
+        window.setMinHeight(WINDOW_HEIGHT);
+        window.setWidth(WINDOW_WIDTH);
+        window.setMinWidth(WINDOW_WIDTH);
         window.setScene(scene);
         window.showAndWait();
 
