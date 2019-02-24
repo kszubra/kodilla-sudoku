@@ -1,5 +1,6 @@
 package com.kodilla.sudoku.frontend.popups;
 
+import com.kodilla.sudoku.backend.exceptions.NoScoreToDisplayException;
 import com.kodilla.sudoku.backend.exceptions.PlayerNotFoundException;
 import com.kodilla.sudoku.backend.player.Player;
 import com.kodilla.sudoku.backend.player.PlayerDao;
@@ -17,9 +18,7 @@ import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -117,44 +116,72 @@ public class RankingGenerator {
             idAndUsernameMap.put(player.getUserID(), player.getUsername());
         }
 
+        prepareEasyScores();
+        prepareMediumScores();
+        prepareHardScores();
+    }
+
+    private void prepareEasyScores () {
         List<Score> easyScores = scoreDao.findAll().stream()
                 .filter(e -> e.getDifficultyLevel().equals("easy"))
+                .filter(e -> e.isCompleted())
                 .collect(Collectors.toList());
         easyScores.sort(Comparator.comparing(Score::getDuration));
-
-        List<Score> mediumScores = scoreDao.findAll().stream()
-                .filter(e -> e.getDifficultyLevel().equals("medium"))
-                .collect(Collectors.toList());
-        mediumScores.sort(Comparator.comparing(Score::getDuration));
-
-        List<Score> hardScores = scoreDao.findAll().stream()
-                .filter(e -> e.getDifficultyLevel().equals("hard"))
-                .collect(Collectors.toList());
-        hardScores.sort(Comparator.comparing(Score::getDuration));
-
         StringBuilder easyScoreBuilder = new StringBuilder();
-        StringBuilder mediumScoreBuilder = new StringBuilder();
-        StringBuilder hardScoreBuilder = new StringBuilder();
 
         for(Score score : easyScores) {
             easyScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
         }
         easyRanking.setText(easyScoreBuilder.toString());
 
+        Optional<Score> bestEasyScore = easyScores.stream()
+                .filter(e -> e.getPlayer().getUserID() == currentPlayer.getUserID())
+                .filter(e -> e.isCompleted())
+                .min(Comparator.comparing(Score::getDuration));
+
+        playerBestEasyScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestEasyScore.isPresent()) ? bestEasyScore.get().getDuration() : "not present" ) );
+    }
+
+    private void prepareMediumScores () {
+        List<Score> mediumScores = scoreDao.findAll().stream()
+                .filter(e -> e.getDifficultyLevel().equals("medium"))
+                .filter(e -> e.isCompleted())
+                .collect(Collectors.toList());
+        mediumScores.sort(Comparator.comparing(Score::getDuration));
+        StringBuilder mediumScoreBuilder = new StringBuilder();
+
         for(Score score : mediumScores) {
             mediumScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
         }
         mediumRanking.setText(mediumScoreBuilder.toString());
+
+        Optional<Score> bestMediumScore = mediumScores.stream()
+                .filter(e -> e.getPlayer().getUserID() == currentPlayer.getUserID())
+                .filter(e -> e.isCompleted())
+                .min(Comparator.comparing(Score::getDuration));
+
+        playerBestMediumScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestMediumScore.isPresent()) ? bestMediumScore.get().getDuration() : "not present" ) );
+    }
+
+    private void prepareHardScores () {
+        List<Score> hardScores = scoreDao.findAll().stream()
+                .filter(e -> e.getDifficultyLevel().equals("hard"))
+                .filter(e -> e.isCompleted())
+                .collect(Collectors.toList());
+        hardScores.sort(Comparator.comparing(Score::getDuration));
+        StringBuilder hardScoreBuilder = new StringBuilder();
 
         for(Score score : hardScores) {
             hardScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
         }
         hardRanking.setText(hardScoreBuilder.toString());
 
-        playerBestEasyScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + scoreDao.getBestEasyScoreTimeOf(currentPlayer.getUserID()));
-        playerBestMediumScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + scoreDao.getBestMediumScoreTimeOf(currentPlayer.getUserID()));
-        playerBestHardScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + scoreDao.getBestHardScoreTimeOf(currentPlayer.getUserID()));
+        Optional<Score> bestHardScore = hardScores.stream()
+                .filter(e -> e.getPlayer().getUserID() == currentPlayer.getUserID())
+                .filter(e -> e.isCompleted())
+                .min(Comparator.comparing(Score::getDuration));
 
+        playerBestHardScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestHardScore.isPresent()) ? bestHardScore.get().getDuration() : "not present" ) );
     }
 
     public void displayRanking(String playerUsername) {

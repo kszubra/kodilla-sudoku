@@ -10,18 +10,21 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
+
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name="Score.getBestEasyScoreTimeOf",
-                query="SELECT MIN(duration) FROM scores WHERE player_id= CONCAT(:PLAYER_ID, ' and difficulty_level=\"easy\"')"
+                query="SELECT MIN(duration) FROM scores WHERE player_id= CONCAT(:PLAYER_ID, 'and (completed=\"1\" and difficulty_level=\"easy\")')"
         ),
+
         @NamedNativeQuery(
                 name="Score.getBestMediumScoreTimeOf",
-                query="SELECT MIN(duration) FROM scores WHERE player_id= CONCAT(:PLAYER_ID, ' and difficulty_level=\"medium\"')"
+                query="SELECT MIN(duration) FROM scores WHERE (" +"player_id= CONCAT(:PLAYER_ID, 'and completed=\"1\" and difficulty_level=\"medium\"')" + ")"
         ),
+
         @NamedNativeQuery(
                 name="Score.getBestHardScoreTimeOf",
-                query="SELECT MIN(duration) FROM scores WHERE player_id= CONCAT(:PLAYER_ID, ' and difficulty_level=\"hard\"')"
+                query="SELECT MIN(duration) FROM scores WHERE player_id= CONCAT(:PLAYER_ID, 'and (completed=\"1\" and difficulty_level=\"hard\")')"
         )
 })
 
