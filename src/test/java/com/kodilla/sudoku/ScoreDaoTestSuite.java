@@ -25,7 +25,6 @@ public class ScoreDaoTestSuite {
 
     private static int testNumber;
 
-
     @Before
     public void beforeTest() {
         testNumber++;
