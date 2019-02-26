@@ -9,19 +9,20 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Ignore
 public class PlayerDaoTestSuite {
+    @Autowired
+    ApplicationContext context;
     @Autowired
     PlayerDao playerDao;
 
     private static int testNumber;
-
 
     @Before
     public void beforeTest() {
@@ -37,6 +38,7 @@ public class PlayerDaoTestSuite {
 
     @Test
     public void testAddingNewPlayer() {
+        playerDao = context.getBean(PlayerDao.class);
         //given
         PasswordHasher hasher = Sha512Hasher.getInstance();
         Player testPlayer = new Player();
@@ -106,7 +108,7 @@ public class PlayerDaoTestSuite {
         Assert.assertTrue(loadedPlayer.getUsername().equals("TestPlayer"));
 
         //cleanup
-        //playerDao.delete(testPlayer);
+        playerDao.delete(testPlayer);
 
 
     }

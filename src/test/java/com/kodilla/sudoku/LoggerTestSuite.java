@@ -2,7 +2,6 @@ package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.logger.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class LoggerTestSuite {
