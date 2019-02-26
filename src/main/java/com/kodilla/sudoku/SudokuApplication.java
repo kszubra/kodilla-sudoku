@@ -19,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -27,11 +29,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.*;
 
 @SpringBootApplication
-public class SudokuApplication extends Application {
+public class SudokuApplication  extends Application  {
     private static ConfigurableApplicationContext context;
     @Autowired
     ProfileGenerator profileGenerator;
@@ -73,6 +76,9 @@ public class SudokuApplication extends Application {
     private VBox rightPanel, topPanel;
     private HBox bottomPanel;
     private Label playerDisplay, timerDisplay;
+
+    private Media errorSound, successSound;
+    private MediaPlayer errorSoundPlayer, successSoundPlayer;
 
 
     private void initializeRightPanel() {
@@ -266,10 +272,26 @@ public class SudokuApplication extends Application {
              */
 
             else {
+                try{
+                    errorSound = new Media(getClass().getResource("/SFX/Error.mp3").toURI().toString());
+                    errorSoundPlayer = new MediaPlayer(errorSound);
+
+                } catch (URISyntaxException e) {
+                    System.out.println("Unable to load sound files");
+                }
+                errorSoundPlayer.play();
                 MessageBox.displayMessage("Value not available", "This value is not available in this field");
+
             }
 
             if(isGameComplete()) {
+                try{
+                    successSound = new Media(getClass().getResource("/SFX/Success.mp3").toURI().toString());
+                    successSoundPlayer = new MediaPlayer(successSound);
+                } catch (URISyntaxException e) {
+                    System.out.println("Unable to load sound files");
+                }
+                successSoundPlayer.play();
                 MessageBox.displayMessage("Congratulations!", "Congratulations, you completed the puzzle");
                 handleEndGame(true);
             }
@@ -371,7 +393,6 @@ public class SudokuApplication extends Application {
         rankingGenerator = context.getBean(RankingGenerator.class);
         playerDao = context.getBean(PlayerDao.class);
         scoreDao = context.getBean(ScoreDao.class);
-
 
         initializeTopPanel();
 

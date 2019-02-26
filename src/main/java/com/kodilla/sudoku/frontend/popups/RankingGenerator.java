@@ -1,6 +1,5 @@
 package com.kodilla.sudoku.frontend.popups;
 
-import com.kodilla.sudoku.backend.exceptions.NoScoreToDisplayException;
 import com.kodilla.sudoku.backend.exceptions.PlayerNotFoundException;
 import com.kodilla.sudoku.backend.player.Player;
 import com.kodilla.sudoku.backend.player.PlayerDao;
@@ -12,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,13 +29,13 @@ public class RankingGenerator {
     @Autowired
     ScoreDao scoreDao;
 
-    private final double WINDOW_WIDTH = 460;
-    private final double WINDOW_HEIGHT = 320;
+    private final double WINDOW_WIDTH = 500;
+    private final double WINDOW_HEIGHT = 420;
     private final double BETWEEN_COLUMNS_SPACING = 5;
     private final double IN_COLUMN_SPACING = 5;
     private final double COLUMN_WIDTH = (WINDOW_WIDTH - 2*BETWEEN_COLUMNS_SPACING)/3;
     private final double LABEL_BUTTON_HEIGHT = (WINDOW_HEIGHT - 3*IN_COLUMN_SPACING)*0.075;
-    private final double RANKING_HEIGHT = (WINDOW_HEIGHT - 3*IN_COLUMN_SPACING)*0.60;
+    private final double RANKING_HEIGHT = (WINDOW_HEIGHT - 3*IN_COLUMN_SPACING)*0.65;
     private Label easyModeLabel, mediumModeLabel, hardModeLabel, playerBestEasyScore, playerBestMediumScore, playerBestHardScore, easyRanking, mediumRanking, hardRanking;
     private Button closeButton;
     private VBox easyColumn, mediumcolumn, hardColumn;
@@ -130,7 +130,7 @@ public class RankingGenerator {
         StringBuilder easyScoreBuilder = new StringBuilder();
 
         for(Score score : easyScores) {
-            easyScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
+            easyScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " s" + "\r\n" );
         }
         easyRanking.setText(easyScoreBuilder.toString());
 
@@ -139,7 +139,7 @@ public class RankingGenerator {
                 .filter(e -> e.isCompleted())
                 .min(Comparator.comparing(Score::getDuration));
 
-        playerBestEasyScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestEasyScore.isPresent()) ? bestEasyScore.get().getDuration() : "not present" ) );
+        playerBestEasyScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestEasyScore.isPresent()) ? bestEasyScore.get().getDuration() + " s" : "not present" ) );
     }
 
     private void prepareMediumScores () {
@@ -151,7 +151,7 @@ public class RankingGenerator {
         StringBuilder mediumScoreBuilder = new StringBuilder();
 
         for(Score score : mediumScores) {
-            mediumScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
+            mediumScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " s" + "\r\n" );
         }
         mediumRanking.setText(mediumScoreBuilder.toString());
 
@@ -160,7 +160,7 @@ public class RankingGenerator {
                 .filter(e -> e.isCompleted())
                 .min(Comparator.comparing(Score::getDuration));
 
-        playerBestMediumScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestMediumScore.isPresent()) ? bestMediumScore.get().getDuration() : "not present" ) );
+        playerBestMediumScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestMediumScore.isPresent()) ? bestMediumScore.get().getDuration() + " s" : "not present" ) );
     }
 
     private void prepareHardScores () {
@@ -172,7 +172,7 @@ public class RankingGenerator {
         StringBuilder hardScoreBuilder = new StringBuilder();
 
         for(Score score : hardScores) {
-            hardScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " own: " + score.isCompleted() + "\r\n" );
+            hardScoreBuilder.append( idAndUsernameMap.get(score.getPlayer().getUserID()) + ": " + score.getDuration() + " s" + "\r\n" );
         }
         hardRanking.setText(hardScoreBuilder.toString());
 
@@ -181,11 +181,10 @@ public class RankingGenerator {
                 .filter(e -> e.isCompleted())
                 .min(Comparator.comparing(Score::getDuration));
 
-        playerBestHardScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestHardScore.isPresent()) ? bestHardScore.get().getDuration() : "not present" ) );
+        playerBestHardScore.setText(currentPlayer.getUsername() + "'s best score: \r\n" + ( (bestHardScore.isPresent()) ? bestHardScore.get().getDuration() + " s" : "not present" ) );
     }
 
     public void displayRanking(String playerUsername) {
-
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Ranking");
