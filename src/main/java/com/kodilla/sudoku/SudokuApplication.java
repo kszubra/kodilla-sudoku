@@ -12,6 +12,7 @@ import com.kodilla.sudoku.backend.score.Score;
 import com.kodilla.sudoku.backend.score.ScoreDao;
 import com.kodilla.sudoku.frontend.popups.*;
 import javafx.application.Application;
+import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,6 +36,7 @@ import java.util.*;
 
 @SpringBootApplication
 public class SudokuApplication  extends Application  {
+    final JFXPanel fxPanel = new JFXPanel();
     private static ConfigurableApplicationContext context;
     @Autowired
     ProfileGenerator profileGenerator;
@@ -388,6 +390,7 @@ public class SudokuApplication  extends Application  {
 
     @Override
     public void start(Stage window) {
+        final JFXPanel fxPanel = new JFXPanel();
         ProfileGenerator profileGenerator = context.getBean(ProfileGenerator.class);
         NewGameGenerator newGameGenerator = context.getBean(NewGameGenerator.class);
         rankingGenerator = context.getBean(RankingGenerator.class);
@@ -427,8 +430,10 @@ public class SudokuApplication  extends Application  {
     }
 
     public static void main(String[] args) {
+        final JFXPanel fxPanel = new JFXPanel();
         context = SpringApplication.run(SudokuApplication.class, args);
-        launch(args);
+
+        Application.launch(args);
 
     }
 

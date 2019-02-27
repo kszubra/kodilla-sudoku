@@ -17,13 +17,14 @@ import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Ignore
 public class ScoreDaoTestSuite {
     @Autowired
     PlayerDao playerDao;
     @Autowired
     ScoreDao scoreDao;
-
     private static int testNumber;
+
 
     @Before
     public void beforeTest() {

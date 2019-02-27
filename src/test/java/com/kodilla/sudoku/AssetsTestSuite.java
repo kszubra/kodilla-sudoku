@@ -7,7 +7,7 @@ import com.kodilla.sudoku.backend.exceptions.ValueNotAvailableException;
 import org.junit.*;
 
 import java.util.List;
-
+@Ignore
 public class AssetsTestSuite {
     private SudokuBoard testBoard;
     private static int testNumber = 0;

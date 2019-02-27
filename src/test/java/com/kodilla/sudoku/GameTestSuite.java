@@ -6,7 +6,7 @@ import com.kodilla.sudoku.backend.assets.SudokuBoard;
 import com.kodilla.sudoku.backend.enumerics.DifficultyLevel;
 import org.junit.*;
 
-
+@Ignore
 public class GameTestSuite {
     private static int testNumber = 0;
 
