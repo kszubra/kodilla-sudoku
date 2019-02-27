@@ -19,7 +19,7 @@
 }
 
 .choice-box .menu-item:focused { /* background of selection */
-    -fx-background-color: PaleGreen;
+    -fx-background-color: #29293d;
 }
 
 .choice-box .menu-item > .label { /* text color of not focused item */

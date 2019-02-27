@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Ignore
+
 public class ScoreDaoTestSuite {
     @Autowired
     PlayerDao playerDao;
@@ -58,7 +58,8 @@ public class ScoreDaoTestSuite {
 
         //when
         scoreDao.save(testScore);
-        Score loadedScore = scoreDao.findById(2).orElseThrow(() -> new ScoreNotFoundException("Score with given ID does not exist"));
+        int id = testScore.getScoreId();
+        Score loadedScore = scoreDao.findById(id).orElseThrow(() -> new ScoreNotFoundException("Score with given ID does not exist"));
 
         //then
         Assert.assertTrue(loadedScore.getDuration() == 2300L);

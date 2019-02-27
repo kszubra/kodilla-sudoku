@@ -4,7 +4,7 @@ import com.kodilla.sudoku.backend.autosolving.AutoSolver;
 import com.kodilla.sudoku.backend.autosolving.brutesolving.BSolver;
 import com.kodilla.sudoku.backend.generator.BoardGenerator;
 import org.junit.*;
-@Ignore
+
 public class BoardGeneratorTestSuite {
     private static int testNumber = 0;
 
@@ -42,7 +42,8 @@ public class BoardGeneratorTestSuite {
         int[][] testBoard;
         AutoSolver solver = new BSolver();
 
-        for(int i = 0; i<100; i++) {
+        for(int i = 0; i<50; i++) {
+            System.out.println("Board nr: " + i);
             BoardGenerator generator = new BoardGenerator();
             testBoard = generator.getSolvableBoard(20);
 

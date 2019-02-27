@@ -2,9 +2,8 @@ package com.kodilla.sudoku;
 
 import com.kodilla.sudoku.backend.logger.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-@Ignore
+
 public class LoggerTestSuite {
     private Logger logger = Logger.getInstance();
 

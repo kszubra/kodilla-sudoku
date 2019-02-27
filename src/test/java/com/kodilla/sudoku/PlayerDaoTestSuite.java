@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
-@Ignore
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PlayerDaoTestSuite {
@@ -48,7 +48,8 @@ public class PlayerDaoTestSuite {
 
         //when
         playerDao.save(testPlayer);
-        Player loadedPlayer = playerDao.findById(2).orElseThrow(()-> new PlayerNotFoundException("Player with given ID does not exist"));
+        int id = testPlayer.getUserID();
+        Player loadedPlayer = playerDao.findById(id).orElseThrow(()-> new PlayerNotFoundException("Player with given ID does not exist"));
 
         //then
         Assert.assertTrue(loadedPlayer.getUsername().equals("TestPlayer"));
@@ -63,7 +64,7 @@ public class PlayerDaoTestSuite {
         //given
         PasswordHasher hasher = Sha512Hasher.getInstance();
         Player testPlayer = new Player();
-        String username = "TestPlayer";
+        String username = "UniqueTestPlayer";
         String securePassword = hasher.generateHashedPassword("TestPassword");
         LocalDate registered = LocalDate.now();
         testPlayer.setUsername(username);
@@ -72,41 +73,13 @@ public class PlayerDaoTestSuite {
 
         //when
         playerDao.save(testPlayer);
-        Player loadedPlayer = playerDao.getPlayerByUsername("TestPlayer").orElseThrow(() -> new PlayerNotFoundException("Player of given username doesn not exist"));
+        Player loadedPlayer = playerDao.getPlayerByUsername("UniqueTestPlayer").orElseThrow(() -> new PlayerNotFoundException("Player of given username does not exist"));
 
         //then
-        Assert.assertTrue(loadedPlayer.getUsername().equals("TestPlayer"));
+        Assert.assertTrue(loadedPlayer.getUsername().equals("UniqueTestPlayer"));
 
         //cleanup
         playerDao.delete(testPlayer);
     }
 
-    @Test
-    public void testUpdatingLoginDate() {
-        //given
-        PasswordHasher hasher = Sha512Hasher.getInstance();
-        Player testPlayer = new Player();
-        String username = "JohnRambo";
-        String securePassword = hasher.generateHashedPassword("TestPassword");
-        LocalDate registered = LocalDate.now();
-        testPlayer.setUsername(username);
-        testPlayer.setHashedPassword(securePassword);
-        testPlayer.setRegistrationDate(registered);
-
-        //when
-        playerDao.save(testPlayer);
-        Player loadedPlayer = playerDao.getPlayerByUsername("JohnRambo").orElseThrow(() -> new PlayerNotFoundException("Player of given username doesn not exist"));
-        int id = loadedPlayer.getUserID();
-
-        playerDao.updateLastLoginById(id);
-
-
-        //then
-        Assert.assertTrue(loadedPlayer.getUsername().equals("TestPlayer"));
-
-        //cleanup
-        //playerDao.delete(testPlayer);
-
-
-    }
 }
