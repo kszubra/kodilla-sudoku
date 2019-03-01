@@ -42,7 +42,7 @@ public class BoardGeneratorTestSuite {
         int[][] testBoard;
         AutoSolver solver = new BSolver();
 
-        for(int i = 0; i<50; i++) {
+        for(int i = 0; i<25; i++) {
             System.out.println("Board nr: " + i);
             BoardGenerator generator = new BoardGenerator();
             testBoard = generator.getSolvableBoard(20);

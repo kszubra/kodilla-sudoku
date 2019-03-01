@@ -17,7 +17,6 @@ import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-
 public class ScoreDaoTestSuite {
     @Autowired
     PlayerDao playerDao;
@@ -42,19 +41,22 @@ public class ScoreDaoTestSuite {
     public void testCreatingScore() {
         System.out.println(" creating and saving score in database");
 
-        //given
-        Player testPlayer = new Player();
         PasswordHasher hasher = Sha512Hasher.getInstance();
-        testPlayer.setUsername("Rambo");
-        testPlayer.setRegistrationDate(LocalDate.now());
-        testPlayer.setHashedPassword( hasher.generateHashedPassword("123") );
+        Player testPlayer = new Player();
+        String username = "TestPlayer";
+        String securePassword = hasher.generateHashedPassword("TestPassword");
+        LocalDate registered = LocalDate.now();
+        testPlayer.setUsername(username);
+        testPlayer.setHashedPassword(securePassword);
+        testPlayer.setRegistrationDate(registered);
         playerDao.save(testPlayer);
 
         Score testScore = new Score();
-        testScore.setPlayer(testPlayer);
         testScore.setAchieveDate(LocalDate.now());
         testScore.setCompleted(true);
         testScore.setDuration(2300L);
+        testScore.setPlayer(testPlayer);
+        testScore.setDifficultyLevel("easy");
 
         //when
         scoreDao.save(testScore);
