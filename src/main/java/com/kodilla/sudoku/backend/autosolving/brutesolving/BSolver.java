@@ -43,7 +43,7 @@ public class BSolver implements AutoSolver {
                     for (int value = 1; value < 10; value++) {
                         if (isAvailable(row, column, value)) {
                             board[row][column] = value;
-                            if (solve()) {
+                            if ( solve() ) {
                                 return true;
                             } else {
                                 board[row][column] = EMPTY;
