@@ -18,7 +18,6 @@ import java.util.List;
                 name="Player.getPlayerByUsername",
                 query = "FROM Player WHERE username = :USERNAME"
         )
-
 })
 
 
@@ -26,6 +25,10 @@ import java.util.List;
         @NamedNativeQuery(
                 name="Player.updateLastLoginById",
                 query="UPDATE players SET LAST_LOGIN = curdate() WHERE id= CONCAT(:PLAYER_ID, '; commit;')"
+        ),
+        @NamedNativeQuery(
+                name="Player.ifExistsByUsername",
+                query="SELECT EXISTS(SELECT * FROM players WHERE username = CONCAT('\"',:PLAYER_USERNAME,'\"')"
         )
 
 })

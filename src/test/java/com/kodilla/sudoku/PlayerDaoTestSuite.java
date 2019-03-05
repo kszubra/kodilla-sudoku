@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -34,6 +35,7 @@ public class PlayerDaoTestSuite {
         System.out.println("---------- TEST NR. " + testNumber + " FINISHED ----------\r\n");
     }
 
+    @Transactional
     @Test
     public void testAddingNewPlayer() {
         //given
@@ -59,6 +61,31 @@ public class PlayerDaoTestSuite {
 
     }
 
+    @Transactional
+    @Test
+    public void testIfExistsByUsername() {
+        //given
+        PasswordHasher hasher = Sha512Hasher.getInstance();
+        Player testPlayer = new Player();
+        String username = "TestPlayer";
+        String securePassword = hasher.generateHashedPassword("TestPassword");
+        LocalDate registered = LocalDate.now();
+        testPlayer.setUsername(username);
+        testPlayer.setHashedPassword(securePassword);
+        testPlayer.setRegistrationDate(registered);
+
+        //when
+        playerDao.save(testPlayer);
+
+        //then
+        Assert.assertEquals(1,playerDao.ifExistsByUsername("TestPlayer"));
+
+        //cleanup
+        playerDao.delete(testPlayer);
+
+    }
+
+    @Transactional
     @Test
     public void testGettingPlayerByUsername() {
         //given

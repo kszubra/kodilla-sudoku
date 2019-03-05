@@ -23,4 +23,6 @@ public interface PlayerDao extends CrudRepository<Player, Integer> {
     @Modifying
     void updateLastLoginById(@Param("PLAYER_ID") int id);
 
+    int ifExistsByUsername(@Param("PLAYER_USERNAME") String username);
+
 }
