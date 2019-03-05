@@ -117,7 +117,7 @@ public class NewGameGenerator {
 
         if (givenPasswordHashed.equals(expectedPasswordHashed)) {
             int id = player.getUserID();
-            playerDao.updateLastLoginById(id);
+            //playerDao.updateLastLoginById(id);
             return true;
         } else {
             MessageBox.displayMessage("Login failed", "Login and password do not match");

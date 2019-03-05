@@ -25,4 +25,7 @@ public interface PlayerDao extends CrudRepository<Player, Integer> {
 
     Boolean existsByUsername(String username);
 
+
+
+
 }
