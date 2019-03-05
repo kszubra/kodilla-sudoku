@@ -19,9 +19,7 @@ import java.time.LocalDate;
 public class PlayerDaoTestSuite {
     @Autowired
     PlayerDao playerDao;
-
     private static int testNumber;
-
 
     @Before
     public void beforeTest() {
@@ -78,7 +76,7 @@ public class PlayerDaoTestSuite {
         playerDao.save(testPlayer);
 
         //then
-        Assert.assertEquals(1,playerDao.ifExistsByUsername("TestPlayer"));
+        Assert.assertTrue(playerDao.existsByUsername("TestPlayer"));
 
         //cleanup
         playerDao.delete(testPlayer);
