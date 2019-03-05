@@ -1,1 +1,3 @@
-"# kodilla-sudoku" 
+# DESCRIPTION
+
+Desktop windowed Sudoku game
