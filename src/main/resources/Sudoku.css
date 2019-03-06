@@ -1,0 +1,46 @@
+.root{
+    -fx-background-color: #29293d, linear-gradient(#29293d, #211C24);
+    -fx-text-fill: #b299e6;
+}
+
+.label{
+    -fx-background-color: #29293d;
+    -fx-text-fill: #b299e6;
+}
+
+.button{
+    -fx-background-color: #403F40, linear-gradient(#403F40, #331D45);
+    -fx-text-fill: #b299e6;
+    -fx-text-alignment: center;
+}
+
+.choice-box .context-menu { /* background of the list */
+    -fx-background-color: #29293d;
+}
+
+.choice-box .menu-item:focused { /* background of selection */
+    -fx-background-color: #29293d;
+}
+
+.choice-box .menu-item > .label { /* text color of not focused item */
+    -fx-text-fill: #b299e6;
+}
+
+.choice-box .menu-item:focused > .label { /* text color of focused item */
+    -fx-text-fill: #b299e6;
+}
+
+.choice-box { /* "unlisted" box */
+    -fx-background-color: #403F40, linear-gradient(#403F40, #331D45);
+    -fx-mark-color: #b299e6; //
+}
+.text-field {
+    -fx-background-color: #9e8fbc;
+}
+.password-field {
+    -fx-background-color: #9e8fbc;
+}
+.ranking-text {
+    -fx-text-fill: #b299e6;
+    -fx-fill: #b299e6;
+}
